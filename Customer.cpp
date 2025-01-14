@@ -1,4 +1,5 @@
 #include "Customer.h"
+#include "Trim.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>

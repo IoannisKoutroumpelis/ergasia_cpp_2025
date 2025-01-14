@@ -1,4 +1,5 @@
 #include "Cart.h"
+#include "Trim.h"
 #include <iostream>
 #include <iomanip>
 #include <algorithm>

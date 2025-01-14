@@ -1,4 +1,5 @@
 #include "Admin.h"
+#include "Trim.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -59,6 +60,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
     cout << "Enter product title to edit: ";
     cin.ignore();
     getline(cin, title);
+    title = trim(title);
 
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
@@ -69,21 +71,48 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
         return;
     }
 
-    string newDescription, newCategory, newSubCategory, newUnit;
+    string newTitle, newDescription, newCategory, newSubcategory, newUnit;
     double newPrice;
     int newQuantity;
-
-    cout << "Enter new description (or press Enter to keep current): ";
-    getline(cin, newDescription);
-    if (!newDescription.empty()) it->setDescription(newDescription);
-
-    cout << "Enter new price (or -1 to keep current): ";
-    cin >> newPrice;
-    if (newPrice >= 0) it->setPrice(newPrice);
-
-    cout << "Enter new quantity (or -1 to keep current): ";
-    cin >> newQuantity;
-    if (newQuantity >= 0) it->setQuantity(newQuantity);
+    int choice;
+    label:
+    cout << "Enter number of field you want to edit: 1.Title 2.Description 3.Category and Subcategory 4.Price 5.Quantity 6.Nothing" << endl;
+    cin >> choice;
+    switch(choice) {
+        case 1:
+            cout << "Enter new Title: ";
+            cin.ignore();
+            getline(cin, newTitle);
+            break;
+        case 2:
+            cout << "Enter new Description: ";
+            cin.ignore();
+            getline(cin, newDescription);
+            break;
+        case 3:
+            cout << "Enter new Category : ";
+            cin.ignore();
+            getline(cin, newCategory);
+            cout << "Enter new Subcategory: ";
+            cin.ignore();
+            getline(cin, newSubcategory);
+            break;
+        case 4:
+            cout << "Enter new price: ";
+            cin.ignore();
+            cin >> newPrice;
+            break;
+        case 5:
+            cout << "Enter new quantity: ";
+            cin.ignore();
+            cin >> newQuantity;
+            break;
+        case 6:
+            return;
+        default:
+            cout << "Invalid choice, try again.\n";
+            goto label;
+    }
 
     // Ενημέρωση αρχείου
     ofstream file(fileName);

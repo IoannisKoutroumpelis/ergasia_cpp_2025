@@ -1,4 +1,5 @@
 #include "Product.h"
+#include "Trim.h"
 #include <iomanip>
 using namespace std;
 
@@ -9,7 +10,7 @@ Product::Product(const string& title, const string& description, const string& c
       price(price), unit(unit), quantity(quantity) {}
 
 // Getters
-string Product::getTitle() const { return title; }
+string Product::getTitle() const { return trim(title); }
 string Product::getDescription() const { return description; }
 string Product::getCategory() const { return category; }
 string Product::getSubCategory() const { return subCategory; }
@@ -29,7 +30,7 @@ void Product::setQuantity(int newQuantity) { quantity = newQuantity; }
 ostream& operator<<(ostream& os, const Product& product) {
     os << product.title << "@" << product.description << "@" << product.category << "@"
        << product.subCategory << "@" << fixed << setprecision(2) << product.price << "@"
-       << product.unit << "@" << product.quantity;
+       << product.unit << "@" << fixed << setprecision(0) << product.quantity;
     return os;
 }
 

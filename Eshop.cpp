@@ -150,6 +150,7 @@ void Eshop::login() {
     });
 
     if (it != users.end()) {
+        cout << "Welcome " << username << "!" << endl;
         if ((*it)->getIsAdmin()) {
             dynamic_cast<Admin*>(*it)->displayMenu(products, categories, productsFile);
         } else {

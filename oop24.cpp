@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     string choice;
     cout << "\nWelcome to the e-shop!!!\n";
     do {
-        cout << "Do you want to login or register? (enter option):";
+        cout << "Do you want to login or register? (enter option): ";
         cin >> choice;
 
         if(choice == "login") {
