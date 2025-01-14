@@ -166,7 +166,7 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
     int choice;
     do {
         cout << "\n---Admin Menu---\n";
-        cout << "1. Add Product\n2. Edit Product\n3. Remove Product\n4. Search Product\n5. Show Unavailable Products\n6. Show Top 5 Products\n7. Exit";
+        cout << "1. Add Product\n2. Edit Product\n3. Remove Product\n4. Search Product\n5. Show Unavailable Products\n6. Show Top 5 Products\n7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
