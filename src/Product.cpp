@@ -35,17 +35,33 @@ ostream& operator<<(ostream& os, const Product& product) {
 
 // Overloaded operator>> for input
 istream& operator>>(istream& is, Product& product) {
+    string priceStr;  // Temporary string to handle the price as text before converting to double
+
+    // Διαβάστε τις ιδιότητες του Product από τη ροή εισόδου
     getline(is, product.title, '@');
     getline(is, product.description, '@');
     getline(is, product.category, '@');
     getline(is, product.subCategory, '@');
-    is >> product.price;
-    is.ignore(1, '@');
+
+    // Διαβάστε το price ως string
+    getline(is, priceStr, '@');
+    try {
+        product.price = stod(priceStr);  // Μετατροπή σε double
+    } catch (const invalid_argument& e) {
+        cerr << "Error: Invalid price format for product \"" << product.title << "\"\n";
+        product.price = 0.0; // Default τιμή σε περίπτωση λάθους
+    } catch (const out_of_range& e) {
+        cerr << "Error: Price out of range for product \"" << product.title << "\"\n";
+        product.price = 0.0; // Default τιμή σε περίπτωση λάθους
+    }
+
     getline(is, product.unit, '@');
     is >> product.quantity;
-    is.ignore(); // Ignore the newline character
+    is.ignore(); // Αγνόηση του χαρακτήρα newline
+
     return is;
 }
+
 
 // Display product details
 void Product::displayProduct() const {
