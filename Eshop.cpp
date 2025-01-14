@@ -111,7 +111,7 @@ void Eshop::registerUser() {
     string username, password;
     int isAdmin;
 
-    cout << "Enter username: ";
+    cout << "Please enter your username: ";
     cin >> username;
     for (const auto& user : users) {
         if (user->getUsername() == username) {
@@ -120,7 +120,7 @@ void Eshop::registerUser() {
         }
     }
 
-    cout << "Enter password: ";
+    cout << "Please enter your password: ";
     cin >> password;
 
     cout << "Is the user an admin? (1 for yes, 0 for no): ";
@@ -140,9 +140,9 @@ void Eshop::registerUser() {
 void Eshop::login() {
     string username, password;
 
-    cout << "Enter username: ";
+    cout << "Please enter your username: ";
     cin >> username;
-    cout << "Enter password: ";
+    cout << "Please enter your password: ";
     cin >> password;
 
     auto it = find_if(users.begin(), users.end(), [&username, &password](User* user) {

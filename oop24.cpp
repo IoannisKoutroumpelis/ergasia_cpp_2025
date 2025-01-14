@@ -10,9 +10,8 @@ int main(int argc, char* argv[]) {
     string choice;
 
     do {
-        cout << "\n---Eshop Main Menu---\n";
-        cout << "1. Login\n2. Register\n3. Exit\n";
-        cout << "Enter your choice: ";
+        cout << "\nWelcome to the e-shop!!!\n";
+        cout << "Do you want to login or register? (enter option):";
         cin >> choice;
 
         if(choice == "login") {
@@ -20,10 +19,6 @@ int main(int argc, char* argv[]) {
         }
         else if(choice == "register") {
             shop.registerUser();
-        }
-        else if(choice == "exit") {
-            cout << "Exiting. Goodbye!\n";
-            return 0;
         }
         else {
             cout << "Invalid choice. Try again.\n";
