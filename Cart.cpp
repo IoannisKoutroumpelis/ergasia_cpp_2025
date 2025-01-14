@@ -8,7 +8,7 @@ using namespace std;
 Cart::Cart() : totalCost(0) {}
 
 // Προσθέτει προϊόν στο καλάθι
-void Cart::addItem(const string& title, double quantity, double price) {
+void Cart::addItem(const string& title, int quantity, double price) {
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title;
     });
@@ -39,7 +39,7 @@ void Cart::removeItem(const string& title) {
 }
 
 // Ενημερώνει την ποσότητα ενός προϊόντος στο καλάθι
-void Cart::updateItem(const string& title, double newQuantity, double price, double availableQuantity) {
+void Cart::updateItem(const string& title, int newQuantity, double price, int availableQuantity) {
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title;
     });

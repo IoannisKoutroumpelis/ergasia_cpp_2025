@@ -4,7 +4,7 @@ using namespace std;
 
 // Constructor
 Product::Product(const string& title, const string& description, const string& category,
-                 const string& subCategory, double price, const string& unit, double quantity)
+                 const string& subCategory, double price, const string& unit, int quantity)
     : title(title), description(description), category(category), subCategory(subCategory),
       price(price), unit(unit), quantity(quantity) {}
 
@@ -15,7 +15,7 @@ string Product::getCategory() const { return category; }
 string Product::getSubCategory() const { return subCategory; }
 double Product::getPrice() const { return price; }
 string Product::getUnit() const { return unit; }
-double Product::getQuantity() const { return quantity; }
+int Product::getQuantity() const { return quantity; }
 
 // Setters
 void Product::setTitle(const string& newTitle) { title = newTitle; }
@@ -23,7 +23,7 @@ void Product::setDescription(const string& newDescription) { description = newDe
 void Product::setCategory(const string& newCategory) { category = newCategory; }
 void Product::setSubCategory(const string& newSubCategory) { subCategory = newSubCategory; }
 void Product::setPrice(double newPrice) { price = newPrice; }
-void Product::setQuantity(double newQuantity) { quantity = newQuantity; }
+void Product::setQuantity(int newQuantity) { quantity = newQuantity; }
 
 // Overloaded operator<< for output
 ostream& operator<<(ostream& os, const Product& product) {

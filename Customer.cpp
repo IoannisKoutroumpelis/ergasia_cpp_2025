@@ -9,7 +9,7 @@ using namespace std;
 // Προσθήκη προϊόντος στο καλάθι
 void Customer::addToCart(const vector<Product>& products) {
     string title;
-    double quantity;
+    int quantity;
 
     cout << "Enter product title to add: ";
     cin.ignore();
@@ -48,7 +48,7 @@ void Customer::removeFromCart() {
 // Ενημέρωση προϊόντος στο καλάθι
 void Customer::updateCart(const vector<Product>& products) {
     string title;
-    double quantity;
+    int quantity;
 
     cout << "Enter product title to update: ";
     cin.ignore();

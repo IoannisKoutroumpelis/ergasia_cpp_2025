@@ -7,7 +7,6 @@ int main(int argc, char* argv[]) {
     }
 
     Eshop shop(argv[1], argv[2], argv[3]);
-    //int choice;
     string choice;
 
     do {
@@ -16,19 +15,6 @@ int main(int argc, char* argv[]) {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        /*switch (choice) {
-            case 1:
-                shop.login();
-                break;
-            case 2:
-                shop.registerUser();
-                break;
-            case 3:
-                cout << "Exiting. Goodbye!\n";
-                return 0;
-            default:
-                cout << "Invalid choice. Try again.\n";
-        }*/
         if(choice == "login") {
             shop.login();
         }
@@ -43,6 +29,4 @@ int main(int argc, char* argv[]) {
             cout << "Invalid choice. Try again.\n";
         }
     } while (true);
-
-    //return 0;
 }

@@ -10,7 +10,7 @@ using namespace std;
 void Admin::addProduct(vector<Product>& products, const vector<string>& categories, const string& fileName) {
     string title, description, category, subCategory, unit;
     double price;
-    double quantity;
+    int quantity;
 
     cout << "Enter product title: ";
     cin.ignore();
@@ -23,14 +23,6 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     for (size_t i = 0; i < categories.size(); ++i) {
         cout << i + 1 << ". " << categories[i] << endl;
     }
-    /*int catChoice;
-    cout << "Select category (number): ";
-    cin >> catChoice;
-    if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
-        cout << "Invalid category.\n";
-        return;
-    }
-    category = categories[catChoice - 1];*/
     cout << "Select category: ";
     getline(cin, category);
 
@@ -55,7 +47,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
         return;
     }
     file << endl << title << " @ " << description << " @ " << category << " @ " << subCategory << " @ " 
-         << price << " @ " << unit << " @ " << quantity << endl;
+         << fixed << setprecision(2)  << price << " @ " << unit << " @ " << fixed << setprecision(0) << quantity << endl;
     file.close();
 
     cout << "Product added successfully.\n";
@@ -79,7 +71,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
 
     string newDescription, newCategory, newSubCategory, newUnit;
     double newPrice;
-    double newQuantity;
+    int newQuantity;
 
     cout << "Enter new description (or press Enter to keep current): ";
     getline(cin, newDescription);
@@ -174,7 +166,7 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
     int choice;
     do {
         cout << "\n---Admin Menu---\n";
-        cout << "1. Add Product\n2. Edit Product\n3. Search Products\n4. View Statistics\n5. Exit\n";
+        cout << "1. Add Product\n2. Edit Product\n3. Remove Product\n4. Search Product\n5. Show Unavailable Products\n6. Show Top 5 Products\n7. Exit";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -185,16 +177,12 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
             case 2:
                 editProduct(products, fileName);
                 break;
-            case 3:
+            case 4:
                 searchProducts(products, categories);
                 break;
-            case 4:
-                viewStatistics(products);
-                break;
             case 7:
-                //cout << "Exiting Admin Menu.\n";
-                //return;
-                exit;
+                cout << "Exiting Admin Menu.\n";
+                return;
             default:
                 cout << "Invalid choice. Try again.\n";
         }

@@ -10,9 +10,9 @@ private:
 public:
     Cart();
 
-    void addItem(const string& title, double quantity, double price);
+    void addItem(const string& title, int quantity, double price);
     void removeItem(const string& title);
-    void updateItem(const string& title, double newQuantity, double price, double availableQuantity);
+    void updateItem(const string& title, int newQuantity, double price, int availableQuantity);
     void displayCart() const;
     double getTotalCost() const;
     void clearCart();

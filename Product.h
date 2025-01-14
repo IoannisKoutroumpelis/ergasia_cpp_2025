@@ -13,12 +13,12 @@ private:
     string subCategory;
     double price;
     string unit;
-    double quantity;
+    int quantity;
 
 public:
     Product(const string& title = "", const string& description = "",
             const string& category = "", const string& subCategory = "",
-            double price = 0.0, const string& unit = "", double quantity = 0.0);
+            double price = 0.0, const string& unit = "", int quantity = 0.0);
 
     // Getters
     string getTitle() const;
@@ -27,7 +27,7 @@ public:
     string getSubCategory() const;
     double getPrice() const;
     string getUnit() const;
-    double getQuantity() const;
+    int getQuantity() const;
 
     // Setters
     void setTitle(const string& newTitle);
@@ -35,7 +35,7 @@ public:
     void setCategory(const string& newCategory);
     void setSubCategory(const string& newSubCategory);
     void setPrice(double newPrice);
-    void setQuantity(double newQuantity);
+    void setQuantity(int newQuantity);
 
     // Overloaded operators
     friend ostream& operator<<(ostream& os, const Product& product);
