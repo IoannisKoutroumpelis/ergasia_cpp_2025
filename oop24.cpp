@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 
     Eshop shop(argv[1], argv[2], argv[3]);
     string choice;
-    cout << "\nWelcome to the e-shop!!!\n";
+    cout << "Welcome to the e-shop!!!\n";
     do {
         cout << "Do you want to login or register? (enter option): ";
         cin >> choice;

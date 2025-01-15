@@ -47,6 +47,8 @@ void Eshop::loadProducts() {
     while (file >> product) {
         products.push_back(product);
     }
+    file >> product;
+    products.push_back(product);
     file.close();
 }
 
