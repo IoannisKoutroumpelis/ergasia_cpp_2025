@@ -193,10 +193,10 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
     }
 
     for (const auto& product : products) {
-        file << product.getTitle() << "@" << product.getDescription() << "@"
-             << product.getCategory() << "@" << product.getSubCategory() << "@"
-             << product.getPrice() << "@" << product.getUnit() << "@"
-             << product.getQuantity() << endl;
+        file << product.getTitle() << " @ " << product.getDescription() << " @ "
+             << product.getCategory() << " @ " << product.getSubCategory() << " @ "
+             << fixed << setprecision(2) << product.getPrice() << " @ " << product.getUnit() << " @ "
+             << fixed << setprecision(0) << product.getQuantity() << endl;
     }
 
     file.close();
@@ -281,6 +281,9 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
             case 2:
                 editProduct(products, fileName);
                 break;
+            case 3:
+                removeProduct(products, fileName);
+                break;
             case 4:
                 searchProducts(products, categories);
                 break;
@@ -288,7 +291,7 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
                 cout << "Goodbye!\n";
                 return;
             default:
-                cout << "Invalid choice. Try again.\n";
+                cout << "Invalid choice, try again.\n";
         }
     } while (choice != 7);
 }
