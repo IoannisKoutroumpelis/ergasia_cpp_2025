@@ -11,9 +11,9 @@ Product::Product(const string& title, const string& description, const string& c
 
 // Getters
 string Product::getTitle() const { return trim(title); }
-string Product::getDescription() const { return description; }
-string Product::getCategory() const { return category; }
-string Product::getSubCategory() const { return subCategory; }
+string Product::getDescription() const { return trim(description); }
+string Product::getCategory() const { return trim(category); }
+string Product::getSubCategory() const { return trim(subCategory); }
 double Product::getPrice() const { return price; }
 string Product::getUnit() const { return trim(unit); }
 int Product::getQuantity() const { return quantity; }
@@ -46,15 +46,9 @@ istream& operator>>(istream& is, Product& product) {
 
     // Διαβάστε το price ως string
     getline(is, priceStr, '@');
-    try {
+
+    if(priceStr!="")
         product.price = stod(trim(priceStr));  // Μετατροπή σε double
-    } catch (const invalid_argument& e) {
-        cerr << "Error: Invalid price format for product \"" << product.title << "\"\n";
-        product.price = 0.0; // Default τιμή σε περίπτωση λάθους
-    } catch (const out_of_range& e) {
-        cerr << "Error: Price out of range for product \"" << product.title << "\"\n";
-        product.price = 0.0; // Default τιμή σε περίπτωση λάθους
-    }
 
     getline(is, product.unit, '@');
     is >> product.quantity;
