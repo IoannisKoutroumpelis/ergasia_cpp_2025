@@ -11,11 +11,11 @@ Product::Product(const string& title, const string& description, const string& c
 
 // Getters
 string Product::getTitle() const { return trim(title); }
-string Product::getDescription() const { return description; }
-string Product::getCategory() const { return category; }
-string Product::getSubCategory() const { return subCategory; }
+string Product::getDescription() const { return trim(description) ; }
+string Product::getCategory() const { return trim(category) ; }
+string Product::getSubCategory() const { return trim(subCategory); }
 double Product::getPrice() const { return price; }
-string Product::getUnit() const { return unit; }
+string Product::getUnit() const { return trim(unit); }
 int Product::getQuantity() const { return quantity; }
 
 // Setters
