@@ -167,6 +167,44 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
     cout << "Product updated successfully.\n";
 }
 
+void Admin::removeProduct(vector<Product>& products, const string& fileName) {
+    string title;
+    cout << "Enter product title to remove: ";
+    cin.ignore();
+    getline(cin, title);
+
+    auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
+        return p.getTitle() == title;
+    });
+
+    if (it == products.end()) {
+        cout << "Product not found.\n";
+        return;
+    }
+
+    // Remove the product from the vector
+    products.erase(it);
+
+    // Update the file with the remaining products
+    ofstream file(fileName, ios::trunc);
+    if (!file.is_open()) {
+        cerr << "Error: Could not open " << fileName << " for writing.\n";
+        return;
+    }
+
+    for (const auto& product : products) {
+        file << product.getTitle() << "@" << product.getDescription() << "@"
+             << product.getCategory() << "@" << product.getSubCategory() << "@"
+             << product.getPrice() << "@" << product.getUnit() << "@"
+             << product.getQuantity() << endl;
+    }
+
+    file.close();
+
+    cout << "Product removed successfully.\n";
+}
+
+
 // Αναζήτηση προϊόντων
 void Admin::searchProducts(const vector<Product>& products, const vector<string>& categories) const {
     cout << "1. Search by title\n2. Search by category\nEnter your choice: ";
