@@ -62,6 +62,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
     getline(cin, title);
     title = trim(title);
 
+
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
@@ -71,59 +72,95 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
         return;
     }
 
-    string newTitle, newDescription, newCategory, newSubcategory, newUnit;
-    double newPrice;
-    int newQuantity;
+    Product& product = *it;
     int choice;
-    label:
-    cout << "Enter number of field you want to edit: 1.Title 2.Description 3.Category and Subcategory 4.Price 5.Quantity 6.Nothing" << endl;
-    cin >> choice;
-    switch(choice) {
-        case 1:
-            cout << "Enter new Title: ";
-            cin.ignore();
-            getline(cin, newTitle);
-            break;
-        case 2:
-            cout << "Enter new Description: ";
-            cin.ignore();
-            getline(cin, newDescription);
-            break;
-        case 3:
-            cout << "Enter new Category : ";
-            cin.ignore();
-            getline(cin, newCategory);
-            cout << "Enter new Subcategory: ";
-            cin.ignore();
-            getline(cin, newSubcategory);
-            break;
-        case 4:
-            cout << "Enter new price: ";
-            cin.ignore();
-            cin >> newPrice;
-            break;
-        case 5:
-            cout << "Enter new quantity: ";
-            cin.ignore();
-            cin >> newQuantity;
-            break;
-        case 6:
-            return;
-        default:
+    while (true) {
+        cout << "Enter number of field you want to edit: 1. Title 2. Description 3. Category and Subcategory 4. Price 5. Quantity 6. Nothing\n";
+        cin >> choice;
+
+        if (cin.fail() || choice < 1 || choice > 6) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Invalid choice, try again.\n";
-            goto label;
+            continue;
+        }
+        break;
     }
 
+    cin.ignore(); // Clear the input buffer for getline
+
+    switch (choice) {
+        case 1: {
+            cout << "Enter new Title: ";
+            string newTitle;
+            getline(cin, newTitle);
+            product.setTitle(trim(newTitle));
+            break;
+        }
+        case 2: {
+            cout << "Enter new Description: ";
+            string newDescription;
+            getline(cin, newDescription);
+            product.setDescription(trim(newDescription));
+            break;
+        }
+        case 3: {
+            cout << "Enter new Category: ";
+            string newCategory;
+            getline(cin, newCategory);
+            product.setCategory(trim(newCategory));
+            cout << "Enter new Subcategory: ";
+            string newSubcategory;
+            getline(cin, newSubcategory);
+            product.setSubCategory(trim(newSubcategory));
+            break;
+        }
+        case 4: {
+            cout << "Enter new Price: ";
+            double newPrice;
+            cin >> newPrice;
+            if (cin.fail() || newPrice < 0) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid price.\n";
+            } 
+            else {
+                product.setPrice(newPrice);
+            }
+            break;
+        }
+        case 5: {
+            cout << "Enter new Quantity: ";
+            int newQuantity;
+            cin >> newQuantity;
+            if (cin.fail() || newQuantity < 0) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid quantity.\n";
+                } 
+            else {
+                product.setQuantity(newQuantity);
+            }
+            break;
+        }
+        default:
+        return;
+    }    
     // Ενημέρωση αρχείου
     ofstream file(fileName);
     if (!file.is_open()) {
         cerr << "Error: Could not open " << fileName << " for writing.\n";
         return;
     }
-    for (const auto& product : products) {
-        file << product.getTitle() << "@" << product.getDescription() << "@" << product.getCategory() << "@" 
-             << product.getSubCategory() << "@" << product.getPrice() << "@" << product.getUnit() << "@" 
-             << product.getQuantity() << endl;
+    for (size_t i = 0; i < products.size(); i++) {
+        const auto& product = products[i];
+        file << product.getTitle() << " @ " << product.getDescription() << " @ " << product.getCategory() << " @ " 
+             << product.getSubCategory() << " @ " << product.getPrice() << " @ " << product.getUnit() << " @ " 
+             << product.getQuantity();
+    // Προσθήκη νέας γραμμής εκτός από την τελευταία εγγραφή
+        if (i < products.size() - 1) {
+            file << endl;
+        }
     }
     file.close();
 
@@ -194,7 +231,7 @@ void Admin::viewStatistics(const vector<Product>& products) const {
 void Admin::displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName) {
     int choice;
     do {
-        cout << "\n---Admin Menu---\n";
+        cout << "---Admin Menu---\n";
         cout << "1. Add Product\n2. Edit Product\n3. Remove Product\n4. Search Product\n5. Show Unavailable Products\n6. Show Top 5 Products\n7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
@@ -210,7 +247,7 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
                 searchProducts(products, categories);
                 break;
             case 7:
-                cout << "Exiting Admin Menu.\n";
+                cout << "Goodbye!\n";
                 return;
             default:
                 cout << "Invalid choice. Try again.\n";
