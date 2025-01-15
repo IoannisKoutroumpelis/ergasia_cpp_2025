@@ -11,7 +11,7 @@ public:
     Cart();
 
     void addItem(const string& title, int quantity, double price);
-    void removeItem(const string& title);
+    void removeItem(const string& title, double price);
     void updateItem(const string& title, int newQuantity, double price, int availableQuantity);
     void displayCart() const;
     double getTotalCost() const;

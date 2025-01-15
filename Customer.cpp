@@ -1,4 +1,6 @@
 #include "Customer.h"
+#include "Product.h"
+#include "Eshop.h"
 #include "Trim.h"
 #include <iostream>
 #include <iomanip>
@@ -36,14 +38,17 @@ void Customer::addToCart(const vector<Product>& products) {
 }
 
 // Αφαίρεση προϊόντος από το καλάθι
-void Customer::removeFromCart() {
+void Customer::removeFromCart(vector<Product>& products) {
     string title;
 
     cout << "Enter product title to remove: ";
     cin.ignore();
     getline(cin, title);
-
-    cart.removeItem(title);
+    auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
+        return p.getTitle() == title;
+    });
+    double price = it->getPrice();
+    cart.removeItem(title, price);
 }
 
 // Ενημέρωση προϊόντος στο καλάθι
@@ -113,10 +118,10 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
     }
 
     for (const auto& product : products) {
-        productFile << product.getTitle() << "@" << product.getDescription() << "@"
-                    << product.getCategory() << "@" << product.getSubCategory() << "@"
-                    << product.getPrice() << "@" << product.getUnit() << "@"
-                    << product.getQuantity() << "\n";
+        productFile << product.getTitle() << " @ " << product.getDescription() << " @ "
+                    << product.getCategory() << " @ " << product.getSubCategory() << " @ "
+                    << fixed << setprecision(2) << product.getPrice() << " @ " << product.getUnit() << " @ "
+                    << fixed << setprecision(0) << product.getQuantity() << endl;
     }
 
     productFile.close();
@@ -166,7 +171,7 @@ void Customer::displayMenu(vector<Product>& products, const string& fileName) {
                 updateCart(products);
                 break;
             case 4:
-                removeFromCart();
+                removeFromCart(products);
                 break;
             case 5:
                 completeOrder(products, fileName);

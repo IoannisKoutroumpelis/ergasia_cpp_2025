@@ -25,13 +25,13 @@ void Cart::addItem(const string& title, int quantity, double price) {
 }
 
 // Αφαιρεί προϊόν από το καλάθι
-void Cart::removeItem(const string& title) {
+void Cart::removeItem(const string& title, double price) {
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title;
     });
 
     if (it != items.end()) {
-        totalCost -= it->second;
+        totalCost -= it->second * price;
         items.erase(it);
         cout << "Removed " << title << " from the cart.\n";
     } else {

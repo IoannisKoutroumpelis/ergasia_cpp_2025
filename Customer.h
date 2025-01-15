@@ -16,7 +16,7 @@ public:
     Customer(const string& username, const string& password) : User(username, password, false) {}
 
     void addToCart(const vector<Product>& products);
-    void removeFromCart();
+    void removeFromCart(vector<Product>& products);
     void updateCart(const vector<Product>& products);
     void completeOrder(vector<Product>& products, const string& fileName);
     void viewCart() const;

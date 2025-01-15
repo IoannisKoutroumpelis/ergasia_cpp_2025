@@ -155,7 +155,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
     for (size_t i = 0; i < products.size(); i++) {
         const auto& product = products[i];
         file << product.getTitle() << " @ " << product.getDescription() << " @ " << product.getCategory() << " @ " 
-             << product.getSubCategory() << " @ " << fixed << setprecision(2) << product.getPrice() << " @ "<<fixed << setprecision(0) << product.getUnit() << " @ " 
+             << product.getSubCategory() << " @ " << fixed << setprecision(2) << product.getPrice() << " @ "<< fixed << setprecision(0) << product.getUnit() << " @ " 
              << product.getQuantity();
     // Προσθήκη νέας γραμμής εκτός από την τελευταία εγγραφή
         if (i < products.size() - 1) {
