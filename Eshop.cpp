@@ -111,7 +111,7 @@ void Eshop::updateUsersFile() {
 // Εγγραφή νέου χρήστη
 void Eshop::registerUser() {
     string username, password;
-    int isAdmin;
+    string isAdmin;
 
     cout << "Please enter your username: ";
     cin >> username;
@@ -125,17 +125,22 @@ void Eshop::registerUser() {
     cout << "Please enter your password: ";
     cin >> password;
 
-    cout << "Is the user an admin? (1 for yes, 0 for no): ";
+    cout << "Are you an admin user? (Y/N): ";
     cin >> isAdmin;
 
-    if (isAdmin) {
+    if (isAdmin == "y") {
         users.push_back(new Admin(username, password));
+        updateUsersFile();
+        cout << "Thanks for signing up! You are automatically logged-in as " << username << endl;
+        auto it = users.end() - 1;
+        dynamic_cast<Admin*>(*it)->displayMenu(products, categories, productsFile);
     } else {
         users.push_back(new Customer(username, password));
+        updateUsersFile();
+        cout << "Thanks for signing up! You are automatically logged-in as " << username << endl;
+        auto it = users.end() - 1;
+        dynamic_cast<Customer*>(*it)->displayMenu(products, productsFile);
     }
-
-    updateUsersFile();
-    cout << "User registered successfully.\n";
 }
 
 // Είσοδος χρήστη
@@ -152,7 +157,7 @@ void Eshop::login() {
     });
 
     if (it != users.end()) {
-        cout << "Welcome " << username << "!" << endl;
+        cout << "\nWelcome " << username << "!\n" << endl;
         if ((*it)->getIsAdmin()) {
             dynamic_cast<Admin*>(*it)->displayMenu(products, categories, productsFile);
         } else {

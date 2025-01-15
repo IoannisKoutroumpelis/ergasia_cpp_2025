@@ -10,7 +10,7 @@ class User {
 protected:
     string username;
     string password;
-    bool isAdmin; // true for Admin, false for Customer
+    bool isAdmin;
 
 public:
     User(const string& username, const string& password, bool isAdmin)

@@ -147,28 +147,26 @@ void Customer::displayMenu(vector<Product>& products, const string& fileName) {
     int choice;
     do {
         cout << "\n---Customer Menu---\n";
-        cout << "1. Add product to cart\n";
-        cout << "2. Remove product from cart\n";
-        cout << "3. Update product in cart\n";
-        cout << "4. View cart\n";
+        cout << "1. Search for a product\n";
+        cout << "2. Add product to cart\n";
+        cout << "3. Update product from cart\n";
+        cout << "4. Remove product from cart\n";
         cout << "5. Complete order\n";
         cout << "6. View order history\n";
-        cout << "7. Exit\n";
+        cout << "7. View cart\n";
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-            case 1:
-                addToCart(products);
-                break;
             case 2:
-                removeFromCart();
+                addToCart(products);
                 break;
             case 3:
                 updateCart(products);
                 break;
             case 4:
-                viewCart();
+                removeFromCart();
                 break;
             case 5:
                 completeOrder(products, fileName);
@@ -177,6 +175,9 @@ void Customer::displayMenu(vector<Product>& products, const string& fileName) {
                 viewOrderHistory();
                 break;
             case 7:
+                viewCart();
+                break;
+            case 8:
                 cout << "Goodbye!\n";
                 return;
             default:
