@@ -129,7 +129,7 @@ productFile.close();
 
     // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
     stringstream ss;
-    ss << "---CART " << orderHistory.size() + 1 << " START---\n";
+    ss << "\n\n---CART " << orderHistory.size() + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
         ss << item.second << " " << item.first << "\n";
     }
@@ -163,7 +163,7 @@ void Customer::viewOrderHistory() const {
 void Customer::displayMenu(vector<Product>& products, const string& fileName) {
     int choice;
     do {
-        cout << "\n---Customer Menu---\n";
+        cout << "---Customer Menu---\n";
         cout << "1. Search for a product\n";
         cout << "2. Add product to cart\n";
         cout << "3. Update product from cart\n";
