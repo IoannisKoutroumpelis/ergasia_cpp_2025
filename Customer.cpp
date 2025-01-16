@@ -136,15 +136,20 @@ void Customer::viewCart() const {
 
 // Προβολή ιστορικού παραγγελιών
 void Customer::viewOrderHistory() const {
-    if (orderHistory.empty()) {
-        cout << "No orders in history.\n";
+    string historyFileName = "files/order_history/" + username + "_history.txt";
+
+    ifstream historyFile(historyFileName);
+    if (!historyFile.is_open()) {
+        cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
 
     cout << "---Order History---\n";
-    for (const auto& order : orderHistory) {
-        cout << order << "\n";
+    string line;
+    while (getline(historyFile, line)) {
+        cout << line << endl;
     }
+    historyFile.close();
 }
 
 // Εμφάνιση μενού πελάτη
