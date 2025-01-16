@@ -75,7 +75,7 @@ void Customer::updateCart(const vector<Product>& products) {
 }
 
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
-       string historyFileName = "files/order_history/" + username + "_history.txt";
+    string historyFileName = "files/order_history/" + username + "_history.txt";
 
     // Υπολογισμός αριθμού υπαρχόντων καλαθιών
     ifstream historyFileInput(historyFileName);
@@ -115,7 +115,6 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
             it->setQuantity(newQuantity > 0 ? newQuantity : 0);
         }
     }
-    orderHistory.push_back(ss.str());
     cart.clearCart();
     historyFile << ss.str();
     historyFile.close();

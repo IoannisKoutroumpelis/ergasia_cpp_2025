@@ -10,8 +10,6 @@ using namespace std;
 class Customer : public User {
 private:
     Cart cart;
-    vector<string> orderHistory;
-
 public:
     Customer(const string& username, const string& password) : User(username, password, false) {}
 
