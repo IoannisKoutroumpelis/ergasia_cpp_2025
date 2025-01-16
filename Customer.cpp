@@ -74,27 +74,60 @@ void Customer::updateCart(const vector<Product>& products) {
     }
 }
 
-// Ολοκλήρωση παραγγελίας
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
+    // Άνοιγμα αρχείου ιστορικού παραγγελιών
     ofstream historyFile(historyFileName, ios::app);
     if (!historyFile.is_open()) {
         cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
 
-    historyFile << "---CART " << orderHistory.size() + 1 << " START---\n";
+    // Καταγραφή παραγγελίας στο αρχείο ιστορικού
+    historyFile << endl << "---CART " << orderHistory.size() + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
         historyFile << item.second << " " << item.first << "\n";
     }
     historyFile << "---CART " << orderHistory.size() + 1 << " END---\n";
-    historyFile << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << "\n";
-
+    historyFile << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << endl << endl;
     historyFile.close();
-    cart.clearCart();
 
-    // Δημιουργία εγγραφής παραγγελίας
+    // Ενημέρωση ποσότητας προϊόντων στη μνήμη
+    for (auto& item : cart.getItems()) {
+        auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
+            return product.getTitle() == item.first;
+        });
+
+        if (it != products.end()) {
+            double newQuantity = it->getQuantity() - item.second;
+            it->setQuantity(newQuantity > 0 ? newQuantity : 0); // Αποφυγή αρνητικών τιμών
+        }
+    }
+
+    // Ενημέρωση του αρχείου προϊόντων
+    ofstream productFile(fileName, ios::trunc); // Αντικατάσταση του περιεχομένου
+    if (!productFile.is_open()) {
+        cerr << "Error: Could not open " << fileName << " for writing.\n";
+        return;
+    }
+
+    auto it = products.begin();
+    while (it != products.end()) {
+        productFile << it->getTitle() << "@" << it->getDescription() << "@"
+                    << it->getCategory() << "@" << it->getSubCategory() << "@"
+                    << fixed << setprecision(2) << it->getPrice() << "@"
+                    << it->getUnit() << "@" << fixed << setprecision(0) << it->getQuantity();
+
+        // Προσθήκη νέας γραμμής εκτός από το τελευταίο στοιχείο
+        if (++it != products.end()) {
+            productFile << "\n";
+        }
+    }
+
+productFile.close();
+
+    // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
     stringstream ss;
     ss << "---CART " << orderHistory.size() + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
@@ -102,29 +135,8 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
     }
     ss << "---CART " << orderHistory.size() + 1 << " END---\n";
     ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << "\n";
-
     orderHistory.push_back(ss.str());
     cart.clearCart();
-
-    // Αποθήκευση στο αρχείο παραγγελιών
-    historyFile << ss.str();
-    historyFile.close();
-
-    // Ενημέρωση του αρχείου προϊόντων
-    ofstream productFile(fileName);
-    if (!productFile.is_open()) {
-        cerr << "Error: Could not open " << fileName << " for writing.\n";
-        return;
-    }
-
-    for (const auto& product : products) {
-        productFile << product.getTitle() << " @ " << product.getDescription() << " @ "
-                    << product.getCategory() << " @ " << product.getSubCategory() << " @ "
-                    << fixed << setprecision(2) << product.getPrice() << " @ " << product.getUnit() << " @ "
-                    << fixed << setprecision(0) << product.getQuantity() << endl;
-    }
-
-    productFile.close();
 
     cout << "Order completed successfully and inventory updated.\n";
 }
