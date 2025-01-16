@@ -84,24 +84,16 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
         return;
     }
 
-    historyFile << "---CART " << orderHistory.size() + 1 << " START---\n";
-    for (const auto& item : cart.getItems()) {
-        historyFile << item.second << " " << item.first << "\n";
-    }
-    historyFile << "---CART " << orderHistory.size() + 1 << " END---\n";
-    historyFile << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << "\n";
-
-    historyFile.close();
-    cart.clearCart();
+    
 
     // Δημιουργία εγγραφής παραγγελίας
     stringstream ss;
-    ss << "---CART " << orderHistory.size() + 1 << " START---\n";
+    ss << "\n\n---CART " << orderHistory.size() + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
         ss << item.second << " " << item.first << "\n";
     }
     ss << "---CART " << orderHistory.size() + 1 << " END---\n";
-    ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << "\n";
+    ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost();
 
     orderHistory.push_back(ss.str());
     cart.clearCart();
@@ -151,7 +143,7 @@ void Customer::viewOrderHistory() const {
 void Customer::displayMenu(vector<Product>& products, const string& fileName) {
     int choice;
     do {
-        cout << "\n---Customer Menu---\n";
+        cout << "---Customer Menu---\n";
         cout << "1. Search for a product\n";
         cout << "2. Add product to cart\n";
         cout << "3. Update product from cart\n";
