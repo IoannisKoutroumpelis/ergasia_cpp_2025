@@ -15,7 +15,7 @@ public:
     void removeProduct(vector<Product>& products, const string& fileName);
     void editProduct(vector<Product>& products, const string& fileName);
     void searchProducts(const vector<Product>& products, const vector<string>& categories) const;
-    void unavailableProducts(const vector<Product>& products) const;
+    void unavailableProducts() const;
     void top5Products(const vector<Product>& products) const;
 };
 

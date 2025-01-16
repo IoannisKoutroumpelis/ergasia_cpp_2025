@@ -204,10 +204,13 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
     cout << "Product removed successfully.\n";
 }
 
-
-// Αναζήτηση προϊόντων
 void Admin::searchProducts(const vector<Product>& products, const vector<string>& categories) const {
-    cout << "1. Search by title\n2. Search by category\n3. Search by title and category\nEnter your choice: ";
+    cout << "1. Search by title\n";
+    cout << "2. Search by category\n";
+    cout << "3. Search by title and category\n";
+    cout << "4. View all products\n";
+    cout << "Enter your choice: ";
+
     int choice;
     cin >> choice;
     cin.ignore();
@@ -227,34 +230,94 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
         for (size_t i = 0; i < categories.size(); ++i) {
             cout << i + 1 << ". " << categories[i] << endl;
         }
+
         int catChoice;
         cout << "Select category (number): ";
         cin >> catChoice;
+        cin.ignore();
 
         if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
             cout << "Invalid category.\n";
             return;
         }
 
+        string selectedCategory = categories[catChoice - 1];
         for (const auto& product : products) {
-            if (product.getCategory() == categories[catChoice - 1]) {
+            if (product.getCategory().find(selectedCategory) != string::npos) {
                 product.displayProduct();
             }
         }
-    } else if(choice == 3) {
+    } else if (choice == 3) {
+        string title;
+        cout << "Enter product title: ";
+        getline(cin, title);
 
+        cout << "Available categories:\n";
+        for (size_t i = 0; i < categories.size(); ++i) {
+            cout << i + 1 << ". " << categories[i] << endl;
+        }
+
+        int catChoice;
+        cout << "Select category (number): ";
+        cin >> catChoice;
+        cin.ignore();
+
+        if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
+            cout << "Invalid category.\n";
+            return;
+        }
+
+        string selectedCategory = categories[catChoice - 1];
+        for (const auto& product : products) {
+            if (product.getTitle().find(title) != string::npos &&
+                product.getCategory().find(selectedCategory) != string::npos) {
+                product.displayProduct();
+            }
+        }
+    } else if (choice == 4) {
+        for (const auto& product : products) {
+            product.displayProduct();
+        }
     } else {
-        cout << "Invalid choice.\n";
+        cout << "Invalid choice. Please try again.\n";
     }
 }
 
-void Admin::unavailableProducts(const vector<Product>& products) const {
-    cout << "Unavailable products:\n";
-    for (const auto& product : products) {
-        if (product.getQuantity() == 0) {
-            product.displayProduct();
+void Admin::unavailableProducts() const {
+    const string productsFilePath = "files/products.txt"; // Σταθερή διαδρομή για το αρχείο προϊόντων
+
+    ifstream productsFile(productsFilePath);
+    if (!productsFile.is_open()) {
+        cerr << "Error: Could not open " << productsFilePath << endl;
+        return;
+    }
+
+    string line;
+    cout << "Unavailable Products:\n";
+    bool found = false;
+
+    while (getline(productsFile, line)) {
+        size_t lastSeparator = line.find_last_of('@');
+        if (lastSeparator == string::npos) continue;
+
+        string quantityStr = line.substr(lastSeparator + 1);
+        double quantity = stod(quantityStr);
+
+        if (quantity == 0) {
+            size_t titleSeparator = line.find('@');
+            if (titleSeparator != string::npos) {
+                string title = line.substr(0, titleSeparator);
+                cout << "- " << title << endl;
+                found = true;
+            }
         }
     }
+
+    if (!found) {
+        cout << "All products are available.\n";
+    }
+
+    productsFile.close();
 }
 
 void Admin::top5Products(const vector<Product>& products) const {
@@ -283,7 +346,7 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
                 searchProducts(products, categories);
                 break;
             case 5:
-                unavailableProducts(products);
+                unavailableProducts();
                 break;
             case 6:
                 top5Products(products);
