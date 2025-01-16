@@ -75,21 +75,35 @@ void Customer::updateCart(const vector<Product>& products) {
 }
 
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
-    string historyFileName = "files/order_history/" + username + "_history.txt";
+       string historyFileName = "files/order_history/" + username + "_history.txt";
 
-    fstream historyFile(historyFileName, ios::app);
+    // Υπολογισμός αριθμού υπαρχόντων καλαθιών
+    ifstream historyFileInput(historyFileName);
+    int cartCount = 0;
+    string line;
+
+    if (historyFileInput.is_open()) {
+        while (getline(historyFileInput, line)) {
+            if (line.find("Total Cost: ") != string::npos) {
+                cartCount++; // Αύξηση δείκτη κάθε φορά που βρίσκουμε το "Total Cost: "
+            }
+        }
+        historyFileInput.close();
+    }
+
+    // Άνοιγμα για εγγραφή νέου ιστορικού παραγγελίας
+    ofstream historyFile(historyFileName, ios::app);
     if (!historyFile.is_open()) {
         cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
-
     // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
     stringstream ss;
-    ss << "\n\n---CART " << orderHistory.size() + 1 << " START---\n";
+    ss << "\n\n---CART " << cartCount + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
         ss << item.second << " " << item.first << "\n";
     }
-    ss << "---CART " << orderHistory.size() + 1 << " END---\n";
+    ss << "---CART " << cartCount + 1 << " END---\n";
     ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost();
     
     for (auto& item : cart.getItems()) {
