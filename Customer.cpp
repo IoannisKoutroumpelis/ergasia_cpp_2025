@@ -78,13 +78,11 @@ void Customer::updateCart(const vector<Product>& products) {
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
-    ofstream historyFile(historyFileName, ios::app);
+    fstream historyFile(historyFileName, ios::app);
     if (!historyFile.is_open()) {
         cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
-
-    
 
     // Δημιουργία εγγραφής παραγγελίας
     stringstream ss;
@@ -95,9 +93,17 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
     ss << "---CART " << orderHistory.size() + 1 << " END---\n";
     ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost();
 
+    for (auto& item : cart.getItems()) {
+        auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
+            return product.getTitle() == item.first;
+        });
+        if (it != products.end()) {
+            double newQuantity = it->getQuantity() - item.second;
+            it->setQuantity(newQuantity > 0 ? newQuantity : 0);
+        }
+    }
+    
     orderHistory.push_back(ss.str());
-    cart.clearCart();
-
     // Αποθήκευση στο αρχείο παραγγελιών
     historyFile << ss.str();
     historyFile.close();
@@ -109,11 +115,17 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
         return;
     }
 
-    for (const auto& product : products) {
-        productFile << product.getTitle() << " @ " << product.getDescription() << " @ "
-                    << product.getCategory() << " @ " << product.getSubCategory() << " @ "
-                    << fixed << setprecision(2) << product.getPrice() << " @ " << product.getUnit() << " @ "
-                    << fixed << setprecision(0) << product.getQuantity() << endl;
+    auto it = products.begin();
+    while (it != products.end()) {
+        productFile << it->getTitle() << " @ " << it->getDescription() << " @ "
+                    << it->getCategory() << " @ " << it->getSubCategory() << " @ "
+                    << fixed << setprecision(2) << it->getPrice() << " @ "
+                    << it->getUnit() << " @ " << fixed << setprecision(0) << it->getQuantity();
+
+        // Προσθήκη νέας γραμμής εκτός από το τελευταίο στοιχείο
+        if (++it != products.end()) {
+            productFile << "\n";
+        }
     }
 
     productFile.close();

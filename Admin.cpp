@@ -246,24 +246,17 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
     }
 }
 
-// Προβολή στατιστικών
-void Admin::viewStatistics(const vector<Product>& products) const {
-    cout << "1. View unavailable products\n2. View top ordered products\nEnter your choice: ";
-    int choice;
-    cin >> choice;
-
-    if (choice == 1) {
-        cout << "Unavailable products:\n";
-        for (const auto& product : products) {
-            if (product.getQuantity() == 0) {
-                product.displayProduct();
-            }
+void Admin::unavailableProducts(const vector<Product>& products) const {
+    cout << "Unavailable products:\n";
+    for (const auto& product : products) {
+        if (product.getQuantity() == 0) {
+            product.displayProduct();
         }
-    } else if (choice == 2) {
-        cout << "Feature not yet implemented: Top ordered products.\n";
-    } else {
-        cout << "Invalid choice.\n";
     }
+}
+
+void Admin::top5Products(const vector<Product>& products) const {
+
 }
 
 void Admin::displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName) {
@@ -286,6 +279,12 @@ void Admin::displayMenu(vector<Product>& products, const vector<string>& categor
                 break;
             case 4:
                 searchProducts(products, categories);
+                break;
+            case 5:
+                unavailableProducts(products);
+                break;
+            case 6:
+                top5Products(products);
                 break;
             case 7:
                 cout << "Goodbye!\n";
