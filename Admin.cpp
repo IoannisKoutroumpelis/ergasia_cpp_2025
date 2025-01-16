@@ -1,10 +1,14 @@
 #include "Admin.h"
 #include "Trim.h"
 #include <iostream>
+//#include <map>
+//#include <vector>
+//#include <experimental/filesystem>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 #include <iomanip>
+//namespace fs = std::experimental::filesystem; // Εναλλακτικό namespace
 using namespace std;
 
 // Προσθήκη νέου προϊόντος
@@ -328,7 +332,40 @@ void Admin::unavailableProducts() const {
 }
 
 void Admin::top5Products(const vector<Product>& products) const {
+   /* const string orderHistoryPath = "files/order_history/";
+    map<string, int> productCount;
 
+    for (const auto& entry : fs::directory_iterator(orderHistoryPath)) {
+        if (fs::is_regular_file(entry) && entry.path().extension() == ".txt") {
+            ifstream historyFile(entry.path());
+            if (!historyFile.is_open()) {
+                cerr << "Error: Could not open " << entry.path() << endl;
+                continue;
+            }
+
+            string line;
+            while (getline(historyFile, line)) {
+                if (!line.empty() && isdigit(line[0])) {
+                    size_t spacePos = line.find(' ');
+                    if (spacePos != string::npos) {
+                        string title = line.substr(spacePos + 1);
+                        productCount[title]++;
+                    }
+                }
+            }
+            historyFile.close();
+        }
+    }
+
+    vector<pair<string, int>> sortedProducts(productCount.begin(), productCount.end());
+    sort(sortedProducts.begin(), sortedProducts.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+        return b.second > a.second;
+    });
+
+    cout << "Top 5 Most Popular Products:\n";
+    for (size_t i = 0; i < min(sortedProducts.size(), size_t(5)); ++i) {
+        cout << i + 1 << ". " << sortedProducts[i].first << " - " << sortedProducts[i].second << " times\n";
+    }*/
 }
 
 void Admin::displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName) {
