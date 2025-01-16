@@ -30,7 +30,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
             cout << i + 1 << ". " << categories[i] << endl;
         }
         getline(cin, category);
-    } while (category != "Food" || category != "Drink" || category != "Clothing" || category != "Book" || category != "Tech");
+    } while (category != "Food" && category != "Drink" && category != "Clothing" && category != "Book" && category != "Tech");
 
     cout << "Give subcategory: ";
     getline(cin, subCategory);
@@ -43,7 +43,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     do {
         cout << "Give measurement type[Kg/Unit]: ";
         cin >> unit;
-    } while (unit != "Kg" || unit != "Unit");
+    } while (unit != "Kg" && unit != "Unit");
 
     do {
         cout << "Give amount of " << unit << ": ";
