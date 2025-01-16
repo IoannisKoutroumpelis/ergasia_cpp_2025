@@ -207,7 +207,7 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
 
 // Αναζήτηση προϊόντων
 void Admin::searchProducts(const vector<Product>& products, const vector<string>& categories) const {
-    cout << "1. Search by title\n2. Search by category\nEnter your choice: ";
+    cout << "1. Search by title\n2. Search by category\n3. Search by title and category\nEnter your choice: ";
     int choice;
     cin >> choice;
     cin.ignore();
@@ -241,6 +241,8 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
                 product.displayProduct();
             }
         }
+    } else if(choice == 3) {
+
     } else {
         cout << "Invalid choice.\n";
     }

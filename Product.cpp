@@ -61,7 +61,7 @@ istream& operator>>(istream& is, Product& product) {
 // Display product details
 void Product::displayProduct() const {
     cout << fixed << setprecision(2);
-    cout << title << " @ " << description << " @ " << category << " @ "
-         << subCategory << " @ " << price << " per " << unit << " @ "
+    cout << trim(title) << " @ " << trim(description) << " @ " << trim(category) << " @ "
+         << trim(subCategory) << " @ " << price << " per " << trim(unit) << " @ "
          << quantity << " available\n";
 }
