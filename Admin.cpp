@@ -21,10 +21,10 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     getline(cin, description);
     
     do {
-    cout << "Give one of the following categories:\n";
-    for (size_t i = 0; i < categories.size(); ++i) {
-        cout << i + 1 << ". " << categories[i] << endl;
-    }
+        cout << "Give one of the following categories:\n";
+        for (size_t i = 0; i < categories.size(); ++i) {
+            cout << i + 1 << ". " << categories[i] << endl;
+        }
         getline(cin, category);
     } while (category != "Food" || category != "Drink" || category != "Clothing" || category != "Book" || category != "Tech");
 
@@ -32,18 +32,18 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     getline(cin, subCategory);
 
     do {
-    cout << "Give product price: ";
-    cin >> price;
+        cout << "Give product price: ";
+        cin >> price;
     } while (price < 0);
 
     do {
-    cout << "Give measurement type[Kg/Unit]: ";
-    cin >> unit;
+        cout << "Give measurement type[Kg/Unit]: ";
+        cin >> unit;
     } while (unit != "Kg" || unit != "Unit");
 
     do {
-    cout << "Give amount of " << unit << ": ";
-    cin >> quantity;
+        cout << "Give amount of " << unit << ": ";
+        cin >> quantity;
     } while (quantity < 0);
 
     products.emplace_back(title, description, category, subCategory, price, unit, quantity);
