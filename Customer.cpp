@@ -77,59 +77,34 @@ void Customer::updateCart(const vector<Product>& products) {
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
-<<<<<<< HEAD
     fstream historyFile(historyFileName, ios::app);
-=======
-    // Άνοιγμα αρχείου ιστορικού παραγγελιών
-    ofstream historyFile(historyFileName, ios::app);
->>>>>>> 0f5ad8cfc632b46aed45333dc3310997d095af73
     if (!historyFile.is_open()) {
         cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
 
-<<<<<<< HEAD
-    // Δημιουργία εγγραφής παραγγελίας
+    // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
     stringstream ss;
     ss << "\n\n---CART " << orderHistory.size() + 1 << " START---\n";
-=======
-    // Καταγραφή παραγγελίας στο αρχείο ιστορικού
-    historyFile << endl << "---CART " << orderHistory.size() + 1 << " START---\n";
->>>>>>> 0f5ad8cfc632b46aed45333dc3310997d095af73
     for (const auto& item : cart.getItems()) {
-        historyFile << item.second << " " << item.first << "\n";
+        ss << item.second << " " << item.first << "\n";
     }
-    historyFile << "---CART " << orderHistory.size() + 1 << " END---\n";
-    historyFile << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << endl << endl;
-    historyFile.close();
-
-<<<<<<< HEAD
-=======
-    // Ενημέρωση ποσότητας προϊόντων στη μνήμη
->>>>>>> 0f5ad8cfc632b46aed45333dc3310997d095af73
+    ss << "---CART " << orderHistory.size() + 1 << " END---\n";
+    ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost();
+    
     for (auto& item : cart.getItems()) {
         auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
             return product.getTitle() == item.first;
         });
-<<<<<<< HEAD
         if (it != products.end()) {
             double newQuantity = it->getQuantity() - item.second;
             it->setQuantity(newQuantity > 0 ? newQuantity : 0);
         }
     }
-    
     orderHistory.push_back(ss.str());
-    // Αποθήκευση στο αρχείο παραγγελιών
+    cart.clearCart();
     historyFile << ss.str();
     historyFile.close();
-=======
-
-        if (it != products.end()) {
-            double newQuantity = it->getQuantity() - item.second;
-            it->setQuantity(newQuantity > 0 ? newQuantity : 0); // Αποφυγή αρνητικών τιμών
-        }
-    }
->>>>>>> 0f5ad8cfc632b46aed45333dc3310997d095af73
 
     // Ενημέρωση του αρχείου προϊόντων
     ofstream productFile(fileName, ios::trunc); // Αντικατάσταση του περιεχομένου
@@ -140,37 +115,17 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
 
     auto it = products.begin();
     while (it != products.end()) {
-<<<<<<< HEAD
         productFile << it->getTitle() << " @ " << it->getDescription() << " @ "
                     << it->getCategory() << " @ " << it->getSubCategory() << " @ "
                     << fixed << setprecision(2) << it->getPrice() << " @ "
                     << it->getUnit() << " @ " << fixed << setprecision(0) << it->getQuantity();
-=======
-        productFile << it->getTitle() << "@" << it->getDescription() << "@"
-                    << it->getCategory() << "@" << it->getSubCategory() << "@"
-                    << fixed << setprecision(2) << it->getPrice() << "@"
-                    << it->getUnit() << "@" << fixed << setprecision(0) << it->getQuantity();
->>>>>>> 0f5ad8cfc632b46aed45333dc3310997d095af73
 
         // Προσθήκη νέας γραμμής εκτός από το τελευταίο στοιχείο
         if (++it != products.end()) {
             productFile << "\n";
         }
     }
-
-productFile.close();
-
-    // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
-    stringstream ss;
-    ss << "\n\n---CART " << orderHistory.size() + 1 << " START---\n";
-    for (const auto& item : cart.getItems()) {
-        ss << item.second << " " << item.first << "\n";
-    }
-    ss << "---CART " << orderHistory.size() + 1 << " END---\n";
-    ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost() << "\n";
-    orderHistory.push_back(ss.str());
-    cart.clearCart();
-
+    productFile.close();
     cout << "Order completed successfully and inventory updated.\n";
 }
 
