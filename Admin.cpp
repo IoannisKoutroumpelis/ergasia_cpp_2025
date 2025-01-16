@@ -13,31 +13,38 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     double price;
     int quantity;
 
-    cout << "Enter product title: ";
+    cout << "Give product title: ";
     cin.ignore();
     getline(cin, title);
 
-    cout << "Enter description: ";
+    cout << "Give product description: ";
     getline(cin, description);
-
-    cout << "Available categories:\n";
+    
+    do {
+    cout << "Give one of the following categories:\n";
     for (size_t i = 0; i < categories.size(); ++i) {
         cout << i + 1 << ". " << categories[i] << endl;
     }
-    cout << "Select category: ";
-    getline(cin, category);
+        getline(cin, category);
+    } while (category != "Food" || category != "Drink" || category != "Clothing" || category != "Book" || category != "Tech");
 
-    cout << "Enter subcategory: ";
+    cout << "Give subcategory: ";
     getline(cin, subCategory);
 
-    cout << "Enter price: ";
+    do {
+    cout << "Give product price: ";
     cin >> price;
+    } while (price < 0);
 
-    cout << "Enter unit (Kg/Unit): ";
+    do {
+    cout << "Give measurement type[Kg/Unit]: ";
     cin >> unit;
+    } while (unit != "Kg" || unit != "Unit");
 
-    cout << "Enter quantity: ";
+    do {
+    cout << "Give amount of " << unit << ": ";
     cin >> quantity;
+    } while (quantity < 0);
 
     products.emplace_back(title, description, category, subCategory, price, unit, quantity);
 
@@ -48,10 +55,10 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
         return;
     }
     file << endl << title << " @ " << description << " @ " << category << " @ " << subCategory << " @ " 
-         << fixed << setprecision(2)  << price << " @ " << unit << " @ " << fixed << setprecision(0) << quantity << endl;
+         << fixed << setprecision(2)  << price << " @ " << unit << " @ " << fixed << setprecision(0) << quantity;
     file.close();
 
-    cout << "Product added successfully.\n";
+    cout << "Product added successfully!\n";
 }
 
 // Επεξεργασία προϊόντος
