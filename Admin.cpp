@@ -1,14 +1,15 @@
 #include "Admin.h"
 #include "Trim.h"
 #include <iostream>
-//#include <map>
-//#include <vector>
-//#include <experimental/filesystem>
+#include <dirent.h>
+#include <cstring>
+#include <map>
+#include <vector>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 #include <iomanip>
-//namespace fs = std::experimental::filesystem; // Εναλλακτικό namespace
+
 using namespace std;
 
 // Προσθέτει ένα νέο προϊόν στη λίστα προϊόντων και στο αρχείο αποθήκευσης
@@ -351,42 +352,74 @@ void Admin::unavailableProducts() const {
 
     productsFile.close();
 }
+
+
+
+using namespace std;
+
 void Admin::top5Products(const vector<Product>& products) const {
-   /* const string orderHistoryPath = "files/order_history/";
+    const string orderHistoryPath = "files/order_history/";
     map<string, int> productCount;
 
-    for (const auto& entry : fs::directory_iterator(orderHistoryPath)) {
-        if (fs::is_regular_file(entry) && entry.path().extension() == ".txt") {
-            ifstream historyFile(entry.path());
-            if (!historyFile.is_open()) {
-                cerr << "Error: Could not open " << entry.path() << endl;
+    DIR* dir;
+    struct dirent* entry;
+
+    // Άνοιγμα του φακέλου με τα αρχεία ιστορικού παραγγελιών
+    dir = opendir(orderHistoryPath.c_str());
+    if (!dir) {
+        cerr << "Error: Could not open directory " << orderHistoryPath << endl;
+        return;
+    }
+
+    while ((entry = readdir(dir)) != nullptr) {
+        string fileName = entry->d_name;
+
+        // Παράκαμψη αρχείων που δεν είναι .txt ή που είναι "." και ".."
+        if (fileName == "." || fileName == ".." || fileName.substr(fileName.size() - 4) != ".txt") {
+            continue;
+        }
+
+        ifstream historyFile(orderHistoryPath + fileName);
+        if (!historyFile.is_open()) {
+            cerr << "Error: Could not open file " << fileName << endl;
+            continue;
+        }
+
+        string line;
+        while (getline(historyFile, line)) {
+            // Παράκαμψη γραμμών που δεν περιέχουν δεδομένα προϊόντων
+            if (line.find("---CART") != string::npos || line.find("Total Cost:") != string::npos) {
                 continue;
             }
 
-            string line;
-            while (getline(historyFile, line)) {
-                if (!line.empty() && isdigit(line[0])) {
-                    size_t spacePos = line.find(' ');
-                    if (spacePos != string::npos) {
-                        string title = line.substr(spacePos + 1);
-                        productCount[title]++;
-                    }
-                }
-            }
-            historyFile.close();
-        }
-    }
+            size_t spacePos = line.find(' ');
+            if (spacePos != string::npos) {
+                int quantity = stoi(line.substr(0, spacePos));
+                string title = line.substr(spacePos + 1);
 
+                productCount[title] += quantity;
+            }
+        }
+        historyFile.close();
+    }
+    closedir(dir);
+
+    // Ταξινόμηση προϊόντων με βάση την ποσότητα
     vector<pair<string, int>> sortedProducts(productCount.begin(), productCount.end());
-    sort(sortedProducts.begin(), sortedProducts.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+    sort(sortedProducts.begin(), sortedProducts.end(), [](const auto& a, const auto& b) {
         return b.second > a.second;
     });
 
-    cout << "Top 5 Most Popular Products:\n";
+    // Εμφάνιση των 5 πιο δημοφιλών προϊόντων
+    cout << "Top 5 Most Popular Products (by quantity):\n";
     for (size_t i = 0; i < min(sortedProducts.size(), size_t(5)); ++i) {
-        cout << i + 1 << ". " << sortedProducts[i].first << " - " << sortedProducts[i].second << " times\n";
-    }*/
+        size_t index = sortedProducts.size() - 1 - i; // Υπολογισμός του αντιστρόφου index
+        cout << i + 1 << ". " << sortedProducts[index].first << " - " << sortedProducts[index].second << " units\n";
+    }
+
 }
+
+
 
 // Εμφανίζει το μενού του διαχειριστή
 void Admin::displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName) {
