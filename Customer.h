@@ -17,7 +17,7 @@ public:
     // - Η τρίτη παράμετρος (false) δηλώνει ότι ο χρήστης δεν είναι Admin
     Customer(const string& username, const string& password) : User(username, password, false) {}
 
-    void searchProductsCustomer(const vector<Product>& products);
+    void searchProducts(const vector<Product>& products, const vector<string>& categories) const;
 
     // Προσθέτει ένα προϊόν στο καλάθι
     // - Χρησιμοποιεί ένα const vector<Product>& για να διασφαλιστεί ότι η λίστα προϊόντων δεν επηρεάζεται
@@ -45,7 +45,7 @@ public:
 
     // Εμφανίζει το μενού επιλογών του πελάτη
     // - Διαχειρίζεται τις επιλογές του πελάτη και αλληλεπιδρά με τα προϊόντα (vector<Product>&)
-    void displayMenu(vector<Product>& products, const string& fileName);
+    void displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName);
 };
 
 #endif
