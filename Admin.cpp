@@ -35,14 +35,38 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
         getline(cin, category);
     } while (category != "Food" && category != "Drink" && category != "Clothing" && category != "Book" && category != "Tech");
 
-    cout << "Give subcategory: ";
-    getline(cin, subCategory);
+    if (category == "Food") {
+        do {
+            cout << "Give subcategory: ";
+            getline(cin, subCategory);
+        } while (subCategory != "Fruit" && subCategory != "Vegetable" && subCategory != "Meat" && subCategory != "Seafood" && subCategory != "Dairy" && subCategory != "Sweet" && subCategory != "Baked");
+    } else if (category == "Drink") {
+        do {
+            cout << "Give subcategory: ";
+            getline(cin, subCategory);
+        } while (subCategory != "Juice" && subCategory != "Soft Drink" && subCategory != "Coffee" && subCategory != "Tea" && subCategory != "Dairy" && subCategory != "Alcohol");
+    } else if (category == "Clothing") {
+        do {
+            cout << "Give subcategory: ";
+            getline(cin, subCategory);
+        } while (subCategory != "Shirt" && subCategory != "Pant" && subCategory != "Hat" && subCategory != "Shoe");
+    } else if (category == "Book") {
+        do {
+            cout << "Give subcategory: ";
+            getline(cin, subCategory);
+        } while (subCategory != "Mystery" && subCategory != "Sci-Fi" && subCategory != "Romance" && subCategory != "Comedy" && subCategory != "Academic" && subCategory != "Comic");
+    } else {
+        do {
+            cout << "Give subcategory: ";
+            getline(cin, subCategory);
+        } while (subCategory != "Computer" && subCategory != "Laptop" && subCategory != "Phone" && subCategory != "Tablet");
+    }
 
     // Εισαγωγή τιμής προϊόντος (έλεγχος για θετική τιμή)
     do {
         cout << "Give product price: ";
         cin >> price;
-    } while (price <= 0.00);
+    } while (price <= 0);
 
     // Επιλογή μονάδας μέτρησης
     do {
@@ -54,7 +78,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     do {
         cout << "Give amount of " << unit << ": ";
         cin >> quantity;
-    } while (quantity < 0.00);
+    } while (quantity < 0);
 
     // Δημιουργία και προσθήκη του προϊόντος στη λίστα προϊόντων
     products.emplace_back(title, description, category, subCategory, price, unit, quantity);
@@ -164,8 +188,9 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
             }
             break;
         }
-        default:
-        return;
+        default: {
+            return;
+        }
     }    
 
     // Ενημέρωση του αρχείου προϊόντων
@@ -188,6 +213,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
 
     cout << "Product updated successfully.\n";
 }
+
 // Αφαιρεί προϊόν από τη λίστα προϊόντων και από το αρχείο αποθήκευσης
 void Admin::removeProduct(vector<Product>& products, const string& fileName) {
     string title;
@@ -258,21 +284,53 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
             for (size_t i = 0; i < categories.size(); ++i) {
                 cout << i + 1 << ". " << categories[i] << endl;
             }
+            string category;
+            do {
+                cout << "Select Category: ";
+                getline(cin, category);
+            } while (category != "Food" && category != "Drink" && category != "Clothing" && category != "Book" && category != "Tech");
 
-            int catChoice;
-            cout << "Select category (number): ";
-            cin >> catChoice;
-            cin.ignore();
-
-            if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
-                cout << "Invalid category.\n";
-                return;
-            }
-
-            string selectedCategory = categories[catChoice - 1];
-            for (const auto& product : products) {
-                if (product.getCategory().find(selectedCategory) != string::npos) {
-                    product.displayProduct();
+            cout << "Do you want to search by Subcategory as well? [Y/N]: ";
+            string choice2;
+            cin >> choice2;
+            if (choice2 == "y") {
+                string subCategory;
+                if (category == "Food") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Fruit" && subCategory != "Vegetable" && subCategory != "Meat" && subCategory != "Seafood" && subCategory != "Dairy" && subCategory != "Sweet" && subCategory != "Baked");
+                } else if (category == "Drink") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Juice" && subCategory != "Soft Drink" && subCategory != "Coffee" && subCategory != "Tea" && subCategory != "Dairy" && subCategory != "Alcohol");
+                } else if (category == "Clothing") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Shirt" && subCategory != "Pant" && subCategory != "Hat" && subCategory != "Shoe");
+                } else if (category == "Book") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Mystery" && subCategory != "Sci-Fi" && subCategory != "Romance" && subCategory != "Comedy" && subCategory != "Academic" && subCategory != "Comic");
+                } else {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Computer" && subCategory != "Laptop" && subCategory != "Phone" && subCategory != "Tablet");
+                }
+                for (const auto& product : products) {
+                    if (product.getSubCategory().find(subCategory) != string::npos) {
+                        product.displayProduct();
+                    }
+                }
+            } else {
+                for (const auto& product : products) {
+                    if (product.getCategory().find(category) != string::npos) {
+                        product.displayProduct();
+                    }
                 }
             }
         } else if (choice == 3) {
@@ -284,22 +342,54 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
             for (size_t i = 0; i < categories.size(); ++i) {
                 cout << i + 1 << ". " << categories[i] << endl;
             }
-
-            int catChoice;
-            cout << "Select category (number): ";
-            cin >> catChoice;
-            cin.ignore();
-
-            if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
-                cout << "Invalid category.\n";
-                return;
-            }
-
-            string selectedCategory = categories[catChoice - 1];
-            for (const auto& product : products) {
-                if (product.getTitle().find(title) != string::npos &&
-                    product.getCategory().find(selectedCategory) != string::npos) {
-                    product.displayProduct();
+            string category;
+            do {
+                cout << "Select Category: ";
+                getline(cin, category);
+            } while (category != "Food" && category != "Drink" && category != "Clothing" && category != "Book" && category != "Tech");
+            cout << "Do you want to search by Subcategory as well? [Y/N]: ";
+            string choice2;
+            cin >> choice2;
+            if (choice2 == "y") {
+                string subCategory;
+                if (category == "Food") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Fruit" && subCategory != "Vegetable" && subCategory != "Meat" && subCategory != "Seafood" && subCategory != "Dairy" && subCategory != "Sweet" && subCategory != "Baked");
+                } else if (category == "Drink") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Juice" && subCategory != "Soft Drink" && subCategory != "Coffee" && subCategory != "Tea" && subCategory != "Dairy" && subCategory != "Alcohol");
+                } else if (category == "Clothing") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Shirt" && subCategory != "Pant" && subCategory != "Hat" && subCategory != "Shoe");
+                } else if (category == "Book") {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Mystery" && subCategory != "Sci-Fi" && subCategory != "Romance" && subCategory != "Comedy" && subCategory != "Academic" && subCategory != "Comic");
+                } else {
+                    do {
+                        cout << "Give subcategory: ";
+                        getline(cin, subCategory);
+                    } while (subCategory != "Computer" && subCategory != "Laptop" && subCategory != "Phone" && subCategory != "Tablet");
+                }
+                for (const auto& product : products) {
+                    if (product.getTitle().find(title) != string::npos &&
+                        product.getSubCategory().find(subCategory) != string::npos) {
+                        product.displayProduct();
+                    }
+                }
+            } else {
+                for (const auto& product : products) {
+                    if (product.getTitle().find(title) != string::npos &&
+                        product.getCategory().find(category) != string::npos) {
+                        product.displayProduct();
+                    }
                 }
             }
         } else if (choice == 4) {

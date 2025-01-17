@@ -138,7 +138,7 @@ void Eshop::registerUser() {
         updateUsersFile(); // Ενημερώνει το αρχείο χρηστών
         cout << "Thanks for signing up! You are automatically logged-in as " << username << endl;
         auto it = users.end() - 1;
-        dynamic_cast<Customer*>(*it)->displayMenu(products, productsFile);
+        dynamic_cast<Customer*>(*it)->displayMenu(products, categories, productsFile);
     }
 }
 
@@ -160,7 +160,7 @@ void Eshop::login() {
         if ((*it)->getIsAdmin()) { // Αν είναι διαχειριστής
             dynamic_cast<Admin*>(*it)->displayMenu(products, categories, productsFile);
         } else { // Αν είναι πελάτης
-            dynamic_cast<Customer*>(*it)->displayMenu(products, productsFile);
+            dynamic_cast<Customer*>(*it)->displayMenu(products, categories, productsFile);
         }
     } else { // Αν δεν βρεθεί ο χρήστης
         cout << "Invalid credentials. Please try again.\n";
