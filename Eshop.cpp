@@ -5,14 +5,14 @@
 #include <algorithm>
 using namespace std;
 
-// Κατασκευαστής: Αποθηκεύει τα paths και φορτώνει τα δεδομένα
+// Constructor: Αποθηκεύει τα paths και φορτώνει τα δεδομένα
 Eshop::Eshop(const string& categoriesFile, const string& productsFile, const string& usersFile): categoriesFile(categoriesFile), productsFile(productsFile), usersFile(usersFile) {
     loadCategories(); // Καλεί τη συνάρτηση για να φορτώσει τις κατηγορίες από το αρχείο
     loadProducts();   // Καλεί τη συνάρτηση για να φορτώσει τα προϊόντα από το αρχείο
     loadUsers();      // Καλεί τη συνάρτηση για να φορτώσει τους χρήστες από το αρχείο
 }
 
-// Καταστροφέας: Διαγράφει δυναμικούς χρήστες από τη μνήμη
+// Destructor: Διαγράφει δυναμικούς χρήστες από τη μνήμη
 Eshop::~Eshop() {
     for (auto user : users) { // Διαγράφει κάθε χρήστη που αποθηκεύεται δυναμικά
         delete user;

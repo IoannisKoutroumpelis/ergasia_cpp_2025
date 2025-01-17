@@ -3,7 +3,7 @@
 #include <iomanip>
 using namespace std;
 
-// Κατασκευαστής: Αρχικοποιεί τις τιμές του προϊόντος με τις δεδομένες παραμέτρους
+// Constructor: Αρχικοποιεί τις τιμές του προϊόντος με τις αντίστοιχες παραμέτρους
 Product::Product(const string& title, const string& description, const string& category,
                  const string& subCategory, double price, const string& unit, int quantity)
     : title(title), description(description), category(category), subCategory(subCategory),
@@ -26,8 +26,8 @@ void Product::setSubCategory(const string& newSubCategory) { subCategory = newSu
 void Product::setPrice(double newPrice) { price = newPrice; }
 void Product::setQuantity(int newQuantity) { quantity = newQuantity; }
 
-// Υπερφορτωμένος τελεστής εξόδου (operator<<)
-// Εξάγει τις ιδιότητες του προϊόντος στη ροή εξόδου με διαχωριστή '@'
+// Υπερφορτωμένος τελεστής εξόδου (<<)
+// Εξάγει τις ιδιότητες του προϊόντος στο ρεύμα εξόδου με διαχωριστή '@'
 ostream& operator<<(ostream& os, const Product& product) {
     os << product.title << "@" << product.description << "@" << product.category << "@"
        << product.subCategory << "@" << fixed << setprecision(2) << product.price << "@"
@@ -35,12 +35,12 @@ ostream& operator<<(ostream& os, const Product& product) {
     return os;
 }
 
-// Υπερφορτωμένος τελεστής εισόδου (operator>>)
-// Εισάγει τις ιδιότητες του προϊόντος από τη ροή εισόδου
+// Υπερφορτωμένος τελεστής εισόδου (>>)
+// Εισάγει τις ιδιότητες του προϊόντος από το ρεύμα εισόδου
 istream& operator>>(istream& is, Product& product) {
     string priceStr;  // Προσωρινή μεταβλητή για το price ως string
 
-    // Διαβάζει τις ιδιότητες του προϊόντος από τη ροή εισόδου
+    // Διαβάζει τις ιδιότητες του προϊόντος από το ρεύμα εισόδου
     getline(is, product.title, '@');
     getline(is, product.description, '@');
     getline(is, product.category, '@');

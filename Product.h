@@ -5,25 +5,25 @@
 #include <iostream>
 using namespace std;
 
-// Κλάση Product: Αντιπροσωπεύει ένα προϊόν με χαρακτηριστικά όπως τίτλος, περιγραφή, τιμή και ποσότητα
+// Κλάση Product: Αντιπροσωπεύει ένα προϊόν
 class Product {
 private:
     string title;         // Τίτλος του προϊόντος
     string description;   // Περιγραφή του προϊόντος
-    string category;      // Κατηγορία του προϊόντος (π.χ. Food, Tech)
+    string category;      // Κατηγορία του προϊόντος
     string subCategory;   // Υποκατηγορία του προϊόντος
-    double price;         // Τιμή ανά μονάδα ή βάρος
-    string unit;          // Μονάδα μέτρησης (π.χ. Kg, Unit)
+    double price;         // Τιμή ανά μονάδα
+    string unit;          // Μονάδα μέτρησης (Kg, Unit)
     int quantity;         // Διαθέσιμη ποσότητα
 
 public:
-    // Κατασκευαστής: Αρχικοποιεί το προϊόν με προκαθορισμένες ή παρεχόμενες τιμές
+    // Constructor: Αρχικοποιεί το προϊόν με προκαθορισμένες ή παρεχόμενες τιμές
     Product(const string& title = "", const string& description = "",
             const string& category = "", const string& subCategory = "",
             double price = 0.0, const string& unit = "", int quantity = 0.0);
 
     // Getters: Επιστρέφουν τις τιμές των χαρακτηριστικών
-    // Χρησιμοποιούν `const` για να διασφαλίσουν ότι δεν τροποποιούν το αντικείμενο
+    // Χρησιμοποιούν const για να διασφαλίσουν ότι δεν τροποποιούν το αντικείμενο
     string getTitle() const;
     string getDescription() const;
     string getCategory() const;
@@ -41,8 +41,8 @@ public:
     void setQuantity(int newQuantity);
 
     // Υπερφορτωμένοι τελεστές εισόδου/εξόδου
-    // - `operator<<`: Εξάγει τις ιδιότητες του προϊόντος σε ένα stream
-    // - `operator>>`: Εισάγει τις ιδιότητες του προϊόντος από ένα stream
+    // - operator<<: Εξάγει τις ιδιότητες του προϊόντος σε ένα stream
+    // - operator>>: Εισάγει τις ιδιότητες του προϊόντος από ένα stream
     friend ostream& operator<<(ostream& os, const Product& product);
     friend istream& operator>>(istream& is, Product& product);
 

@@ -13,9 +13,11 @@ private:
     Cart cart; // Αντικείμενο που αποθηκεύει τα προϊόντα που έχει προσθέσει ο πελάτης στο καλάθι του
 
 public:
-    // Κατασκευαστής: Αρχικοποιεί έναν πελάτη με όνομα χρήστη και κωδικό πρόσβασης
-    // - Ο τρίτος παραμετρικός δείκτης (false) δηλώνει ότι ο χρήστης δεν είναι Admin
+    // Constructor: Αρχικοποιεί έναν πελάτη με όνομα χρήστη και κωδικό πρόσβασης
+    // - Η τρίτη παράμετρος (false) δηλώνει ότι ο χρήστης δεν είναι Admin
     Customer(const string& username, const string& password) : User(username, password, false) {}
+
+    void searchProductsCustomer(const vector<Product>& products);
 
     // Προσθέτει ένα προϊόν στο καλάθι
     // - Χρησιμοποιεί ένα const vector<Product>& για να διασφαλιστεί ότι η λίστα προϊόντων δεν επηρεάζεται

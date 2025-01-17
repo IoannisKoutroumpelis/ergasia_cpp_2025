@@ -41,7 +41,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     do {
         cout << "Give product price: ";
         cin >> price;
-    } while (price < 0);
+    } while (price <= 0.00);
 
     // Επιλογή μονάδας μέτρησης
     do {
@@ -215,7 +215,7 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
         return;
     }
 
-    // Γράφει τα εναπομείναντα προϊόντα στο αρχείο
+    // Γράφει τα υπόλοιπα προϊόντα στο αρχείο
     for (const auto& product : products) {
         file << product.getTitle() << " @ " << product.getDescription() << " @ "
              << product.getCategory() << " @ " << product.getSubCategory() << " @ "
@@ -230,85 +230,87 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
 
 // Αναζητά προϊόντα με βάση τίτλο, κατηγορία ή συνδυασμό αυτών
 void Admin::searchProducts(const vector<Product>& products, const vector<string>& categories) const {
-    cout << "1. Search by title\n";
-    cout << "2. Search by category\n";
-    cout << "3. Search by title and category\n";
-    cout << "4. View all products\n";
-    cout << "Enter your choice: ";
-
     int choice;
-    cin >> choice;
-    cin.ignore();
+    do {
+        cout << "1. Search by title\n";
+        cout << "2. Search by category\n";
+        cout << "3. Search by title and category\n";
+        cout << "4. View all products\n";
+        cout << "Enter your choice: ";
 
-    // Αναζήτηση προϊόντων ανάλογα με την επιλογή του χρήστη
-    if (choice == 1) {
-        string title;
-        cout << "Enter product title: ";
-        getline(cin, title);
-
-        for (const auto& product : products) {
-            if (product.getTitle().find(title) != string::npos) {
-                product.displayProduct();
-            }
-        }
-    } else if (choice == 2) {
-        cout << "Available categories:\n";
-        for (size_t i = 0; i < categories.size(); ++i) {
-            cout << i + 1 << ". " << categories[i] << endl;
-        }
-
-        int catChoice;
-        cout << "Select category (number): ";
-        cin >> catChoice;
+        cin >> choice;
         cin.ignore();
 
-        if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
-            cout << "Invalid category.\n";
-            return;
-        }
+        // Αναζήτηση προϊόντων ανάλογα με την επιλογή του χρήστη
+        if (choice == 1) {
+            string title;
+            cout << "Enter product title: ";
+            getline(cin, title);
 
-        string selectedCategory = categories[catChoice - 1];
-        for (const auto& product : products) {
-            if (product.getCategory().find(selectedCategory) != string::npos) {
+            for (const auto& product : products) {
+                if (product.getTitle().find(title) != string::npos) {
+                    product.displayProduct();
+                }
+            }
+        } else if (choice == 2) {
+            cout << "Available categories:\n";
+            for (size_t i = 0; i < categories.size(); ++i) {
+                cout << i + 1 << ". " << categories[i] << endl;
+            }
+
+            int catChoice;
+            cout << "Select category (number): ";
+            cin >> catChoice;
+            cin.ignore();
+
+            if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
+                cout << "Invalid category.\n";
+                return;
+            }
+
+            string selectedCategory = categories[catChoice - 1];
+            for (const auto& product : products) {
+                if (product.getCategory().find(selectedCategory) != string::npos) {
+                    product.displayProduct();
+                }
+            }
+        } else if (choice == 3) {
+            string title;
+            cout << "Enter product title: ";
+            getline(cin, title);
+
+            cout << "Available categories:\n";
+            for (size_t i = 0; i < categories.size(); ++i) {
+                cout << i + 1 << ". " << categories[i] << endl;
+            }
+
+            int catChoice;
+            cout << "Select category (number): ";
+            cin >> catChoice;
+            cin.ignore();
+
+            if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
+                cout << "Invalid category.\n";
+                return;
+            }
+
+            string selectedCategory = categories[catChoice - 1];
+            for (const auto& product : products) {
+                if (product.getTitle().find(title) != string::npos &&
+                    product.getCategory().find(selectedCategory) != string::npos) {
+                    product.displayProduct();
+                }
+            }
+        } else if (choice == 4) {
+            // Προβάλλει όλα τα προϊόντα
+            for (const auto& product : products) {
                 product.displayProduct();
             }
+        } else {
+            // Εμφάνιση μηνύματος για μη έγκυρη επιλογή
+            cout << "Invalid choice. Please try again.\n";
         }
-    } else if (choice == 3) {
-        string title;
-        cout << "Enter product title: ";
-        getline(cin, title);
-
-        cout << "Available categories:\n";
-        for (size_t i = 0; i < categories.size(); ++i) {
-            cout << i + 1 << ". " << categories[i] << endl;
-        }
-
-        int catChoice;
-        cout << "Select category (number): ";
-        cin >> catChoice;
-        cin.ignore();
-
-        if (catChoice < 1 || static_cast<size_t>(catChoice) > categories.size()) {
-            cout << "Invalid category.\n";
-            return;
-        }
-
-        string selectedCategory = categories[catChoice - 1];
-        for (const auto& product : products) {
-            if (product.getTitle().find(title) != string::npos &&
-                product.getCategory().find(selectedCategory) != string::npos) {
-                product.displayProduct();
-            }
-        }
-    } else if (choice == 4) {
-        // Προβάλλει όλα τα προϊόντα
-        for (const auto& product : products) {
-            product.displayProduct();
-        }
-    } else {
-        // Εμφάνιση μηνύματος για μη έγκυρη επιλογή
-        cout << "Invalid choice. Please try again.\n";
-    }
+    } while(choice < 1 || choice > 4);
 }
 
 // Εμφανίζει προϊόντα που δεν έχουν διαθέσιμο απόθεμα
@@ -386,6 +388,7 @@ void Admin::top5Products(const vector<Product>& products) const {
     }*/
 }
 
+// Εμφανίζει το μενού του διαχειριστή
 void Admin::displayMenu(vector<Product>& products, const vector<string>& categories, const string& fileName) {
     int choice;
     do {

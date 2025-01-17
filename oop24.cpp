@@ -1,6 +1,5 @@
 #include "Eshop.h"
 
-// Σημείο εκκίνησης του προγράμματος
 int main(int argc, char* argv[]) {
     // Έλεγχος σωστής χρήσης του προγράμματος
     if (argc != 4) { // Αναμένει 3 ορίσματα γραμμής εντολών
@@ -14,7 +13,7 @@ int main(int argc, char* argv[]) {
     string choice;
     cout << "Welcome to the e-shop!!!\n";
 
-    // Κύκλος επιλογών για σύνδεση ή εγγραφή
+    // Επιλογή για σύνδεση ή εγγραφή
     do {
         cout << "Do you want to login or register? (enter option): ";
         cin >> choice;
@@ -30,5 +29,5 @@ int main(int argc, char* argv[]) {
         else {
             cout << "Invalid choice. Try again.\n"; // Μήνυμα για μη έγκυρη επιλογή
         }
-    } while (true); // Επαναλαμβάνει μέχρι να δοθεί έγκυρη επιλογή
+    } while (true); // Επαναλαμβάνεται μέχρι να δοθεί έγκυρη επιλογή
 }

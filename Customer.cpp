@@ -9,8 +9,12 @@
 #include <algorithm>
 using namespace std;
 
+void Customer::searchProductsCustomer(const vector<Product>& products) {
+
+}
+
 // Προσθήκη προϊόντος στο καλάθι
-// - Ελέγχει τη διαθεσιμότητα προϊόντος στη λίστα `products`.
+// - Ελέγχει τη διαθεσιμότητα προϊόντος στη λίστα products.
 // - Αν το προϊόν βρεθεί και υπάρχει επαρκές απόθεμα, το προσθέτει στο καλάθι.
 void Customer::addToCart(const vector<Product>& products) {
     string title;
@@ -23,9 +27,9 @@ void Customer::addToCart(const vector<Product>& products) {
     cout << "Enter quantity: ";
     cin >> quantity;
 
-    // Χρήση `find_if` για αναζήτηση προϊόντος με βάση τον τίτλο.
+    // Χρήση find_if για αναζήτηση προϊόντος με βάση τον τίτλο.
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
-        return p.getTitle() == title; // Λάμβανει ως όρισμα ένα lambda για τον τίτλο
+        return p.getTitle() == title;
     });
 
     if (it != products.end()) { // Αν το προϊόν βρεθεί
@@ -35,7 +39,7 @@ void Customer::addToCart(const vector<Product>& products) {
             cout << "Not enough stock available. Adding all available quantity.\n";
             cart.addItem(it->getTitle(), it->getQuantity(), it->getPrice());
         }
-    } else {
+    } else { // Αν το προϊόν δεν βρεθεί
         cout << "Product not found.\n";
     }
 }
@@ -49,7 +53,7 @@ void Customer::removeFromCart(vector<Product>& products) {
     cin.ignore();
     getline(cin, title);
 
-    // Χρήση `find_if` για αναζήτηση προϊόντος με βάση τον τίτλο
+    // Χρήση find_if για αναζήτηση προϊόντος με βάση τον τίτλο
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
@@ -75,7 +79,7 @@ void Customer::updateCart(const vector<Product>& products) {
     cout << "Enter new quantity: ";
     cin >> quantity;
 
-    // Χρήση `find_if` για εντοπισμό προϊόντος
+    // Χρήση find_if για εντοπισμό προϊόντος με βάση τον τίτλο
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
@@ -93,11 +97,11 @@ void Customer::updateCart(const vector<Product>& products) {
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
-    // Υπολογισμός του αριθμού των παραγγελιών από το ιστορικό
     ifstream historyFileInput(historyFileName);
     int cartCount = 0;
     string line;
 
+    // Υπολογισμός του αριθμού των παραγγελιών από το ιστορικό
     if (historyFileInput.is_open()) {
         while (getline(historyFileInput, line)) {
             if (line.find("Total Cost: ") != string::npos) {
@@ -201,6 +205,8 @@ void Customer::displayMenu(vector<Product>& products, const string& fileName) {
         cin >> choice;
 
         switch (choice) {
+            case 1:
+                searchProductsCustomer(products);
             case 2:
                 addToCart(products);
                 break;

@@ -5,17 +5,17 @@
 #include <algorithm>
 using namespace std;
 
-// Κατασκευαστής: Αρχικοποιεί το καλάθι
-// - Ορίζει το συνολικό κόστος (`totalCost`) στο 0, καθώς το καλάθι ξεκινάει άδειο
+// Constructor: Αρχικοποιεί το καλάθι
+// - Ορίζει το συνολικό κόστος (totalCost) στο 0, καθώς το καλάθι ξεκινάει άδειο
 Cart::Cart() : totalCost(0) {}
 
 // Προσθέτει προϊόν στο καλάθι
-// - Ελέγχει αν το προϊόν υπάρχει ήδη στη λίστα `items` που αποθηκεύει το καλάθι.
+// - Ελέγχει αν το προϊόν υπάρχει ήδη στη λίστα items που αποθηκεύει το καλάθι.
 // - Αν υπάρχει, ενημερώνει την ποσότητά του.
 // - Αν δεν υπάρχει, προσθέτει το προϊόν ως νέο στοιχείο στη λίστα.
 void Cart::addItem(const string& title, int quantity, double price) {
-    // Αναζήτηση του προϊόντος στη λίστα `items` χρησιμοποιώντας τη συνάρτηση `find_if`.
-    // - `find_if`: Επιστρέφει έναν iterator που δείχνει στο στοιχείο που ταιριάζει στο κριτήριο.
+    // Αναζήτηση του προϊόντος στη λίστα items χρησιμοποιώντας τη συνάρτηση find_if.
+    // - find_if: Επιστρέφει έναν iterator που δείχνει στο στοιχείο που ταιριάζει στο κριτήριο.
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title; // Συγκρίνει τον τίτλο του προϊόντος
     });
@@ -24,7 +24,7 @@ void Cart::addItem(const string& title, int quantity, double price) {
     if (it != items.end()) {
         it->second += quantity; // Αυξάνει την ποσότητα του προϊόντος
     } else {
-        // Αν δεν βρεθεί, το προσθέτει στη λίστα `items` χρησιμοποιώντας `emplace_back`.
+        // Αν δεν βρεθεί, το προσθέτει στη λίστα items χρησιμοποιώντας emplace_back.
         items.emplace_back(title, quantity); // Προσθήκη νέου προϊόντος
     }
 
@@ -36,10 +36,10 @@ void Cart::addItem(const string& title, int quantity, double price) {
 }
 
 // Αφαιρεί προϊόν από το καλάθι
-// - Εντοπίζει το προϊόν στη λίστα `items` και το αφαιρεί.
+// - Εντοπίζει το προϊόν στη λίστα items και το αφαιρεί.
 // - Αν το προϊόν δεν βρεθεί, εμφανίζει μήνυμα σφάλματος.
 void Cart::removeItem(const string& title, double price) {
-    // Αναζήτηση του προϊόντος στη λίστα `items` χρησιμοποιώντας `find_if`.
+    // Αναζήτηση του προϊόντος στη λίστα items χρησιμοποιώντας find_if.
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title;
     });
@@ -59,7 +59,7 @@ void Cart::removeItem(const string& title, double price) {
 // - Ελέγχει αν το προϊόν υπάρχει και αν η νέα ποσότητα είναι έγκυρη.
 // - Ενημερώνει την ποσότητα και το συνολικό κόστος.
 void Cart::updateItem(const string& title, int newQuantity, double price, int availableQuantity) {
-    // Αναζήτηση του προϊόντος στη λίστα `items`
+    // Αναζήτηση του προϊόντος στη λίστα items
     auto it = find_if(items.begin(), items.end(), [&title](const pair<string, int>& item) {
         return item.first == title;
     });
@@ -100,22 +100,22 @@ void Cart::displayCart() const {
 }
 
 // Επιστρέφει το συνολικό κόστος του καλαθιού
-// - Επιστρέφει το `totalCost` χωρίς να το τροποποιεί.
+// - Επιστρέφει το totalCost χωρίς να το τροποποιεί.
 double Cart::getTotalCost() const {
     return totalCost;
 }
 
 // Καθαρίζει το περιεχόμενο του καλαθιού
-// - Διαγράφει όλα τα στοιχεία από τη λίστα `items`.
-// - Μηδενίζει το συνολικό κόστος (`totalCost`).
+// - Διαγράφει όλα τα στοιχεία από τη λίστα items.
+// - Μηδενίζει το συνολικό κόστος (totalCost).
 void Cart::clearCart() {
     items.clear(); // Διαγραφή όλων των στοιχείων από τη λίστα
-    totalCost = 0; // Επαναφορά του συνολικού κόστους
+    totalCost = 0; // Επαναφορά του συνολικού κόστους στο 0
 }
 
 // Επιστρέφει τα αντικείμενα του καλαθιού
-// - Επιστρέφει αντίγραφο της λίστας `items`.
-// - Χρησιμοποιεί `const` για να διασφαλίσει ότι η μέθοδος δεν τροποποιεί την κατάσταση του αντικειμένου.
+// - Επιστρέφει αντίγραφο της λίστας items.
+// - Χρησιμοποιεί const για να διασφαλίσει ότι η μέθοδος δεν τροποποιεί την κατάσταση του αντικειμένου.
 vector<pair<string, int>> Cart::getItems() const {
     return items; // Επιστροφή αντιγράφου των στοιχείων
 }

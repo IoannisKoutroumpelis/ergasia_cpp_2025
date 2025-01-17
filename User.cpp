@@ -10,7 +10,7 @@ string User::getPassword() const{
     return password;
 }
 
-// Επιστρέφει αν ο χρήστης είναι admin (1) ή όχι (0)
+// Επιστρέφει αν ο χρήστης είναι admin (true) ή όχι (false)
 bool User::getIsAdmin() const {
     return isAdmin;
 }

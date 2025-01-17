@@ -9,7 +9,7 @@ using namespace std;
 // Κλάση Admin: Υποκλάση της User που αντιπροσωπεύει έναν διαχειριστή
 class Admin : public User {
 public:
-    // Κατασκευαστής: Δημιουργεί έναν Admin χρήστη με όνομα χρήστη και κωδικό πρόσβασης
+    // Constructor: Δημιουργεί έναν Admin χρήστη με όνομα χρήστη και κωδικό πρόσβασης
     Admin(const string& username, const string& password) : User(username, password, true) {}
 
     // Εμφανίζει το μενού του διαχειριστή
@@ -24,7 +24,7 @@ public:
     // Επεξεργάζεται τις λεπτομέρειες ενός προϊόντος
     void editProduct(vector<Product>& products, const string& fileName);
 
-    // Αναζητά προϊόντα με βάση τίτλο ή κατηγορία
+    // Αναζητά προϊόντα με βάση τον τίτλο ή την κατηγορία ή συνδυασμό αυτών
     void searchProducts(const vector<Product>& products, const vector<string>& categories) const;
 
     // Εμφανίζει τα προϊόντα που δεν έχουν διαθέσιμο απόθεμα
