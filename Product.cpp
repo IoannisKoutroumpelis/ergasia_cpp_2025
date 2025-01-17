@@ -1,15 +1,15 @@
-#include "Product.h"
+#include "Product.h" 
 #include "Trim.h"
 #include <iomanip>
 using namespace std;
 
-// Constructor
+// Κατασκευαστής: Αρχικοποιεί τις τιμές του προϊόντος με τις δεδομένες παραμέτρους
 Product::Product(const string& title, const string& description, const string& category,
                  const string& subCategory, double price, const string& unit, int quantity)
     : title(title), description(description), category(category), subCategory(subCategory),
       price(price), unit(unit), quantity(quantity) {}
 
-// Getters
+// Getters: Επιστρέφουν τις τιμές των πεδίων του αντικειμένου, εφαρμόζοντας trim στα string
 string Product::getTitle() const { return trim(title); }
 string Product::getDescription() const { return trim(description); }
 string Product::getCategory() const { return trim(category); }
@@ -18,7 +18,7 @@ double Product::getPrice() const { return price; }
 string Product::getUnit() const { return trim(unit); }
 int Product::getQuantity() const { return quantity; }
 
-// Setters
+// Setters: Ενημερώνουν τις τιμές των πεδίων του αντικειμένου
 void Product::setTitle(const string& newTitle) { title = newTitle; }
 void Product::setDescription(const string& newDescription) { description = newDescription; }
 void Product::setCategory(const string& newCategory) { category = newCategory; }
@@ -26,7 +26,8 @@ void Product::setSubCategory(const string& newSubCategory) { subCategory = newSu
 void Product::setPrice(double newPrice) { price = newPrice; }
 void Product::setQuantity(int newQuantity) { quantity = newQuantity; }
 
-// Overloaded operator<< for output
+// Υπερφορτωμένος τελεστής εξόδου (operator<<)
+// Εξάγει τις ιδιότητες του προϊόντος στη ροή εξόδου με διαχωριστή '@'
 ostream& operator<<(ostream& os, const Product& product) {
     os << product.title << "@" << product.description << "@" << product.category << "@"
        << product.subCategory << "@" << fixed << setprecision(2) << product.price << "@"
@@ -34,31 +35,31 @@ ostream& operator<<(ostream& os, const Product& product) {
     return os;
 }
 
-// Overloaded operator>> for input
+// Υπερφορτωμένος τελεστής εισόδου (operator>>)
+// Εισάγει τις ιδιότητες του προϊόντος από τη ροή εισόδου
 istream& operator>>(istream& is, Product& product) {
-    string priceStr;  // Temporary string to handle the price as text before converting to double
+    string priceStr;  // Προσωρινή μεταβλητή για το price ως string
 
-    // Διαβάστε τις ιδιότητες του Product από τη ροή εισόδου
+    // Διαβάζει τις ιδιότητες του προϊόντος από τη ροή εισόδου
     getline(is, product.title, '@');
     getline(is, product.description, '@');
     getline(is, product.category, '@');
     getline(is, product.subCategory, '@');
 
-    // Διαβάστε το price ως string
+    // Διαβάζει το price ως string και το μετατρέπει σε double
     getline(is, priceStr, '@');
-
-    if(priceStr!="")
-        product.price = stod(trim(priceStr));  // Μετατροπή σε double
+    if(priceStr != "")
+        product.price = stod(trim(priceStr));
 
     getline(is, product.unit, '@');
-    is >> product.quantity;
-    is.ignore(); // Αγνόηση του χαρακτήρα newline
+    is >> product.quantity;  // Διαβάζει την ποσότητα
+    is.ignore(); // Αγνοεί τον χαρακτήρα newline
 
     return is;
 }
 
-
-// Display product details
+// Εμφάνιση λεπτομερειών προϊόντος
+// Εκτυπώνει τα χαρακτηριστικά του προϊόντος σε μορφοποιημένη έξοδο
 void Product::displayProduct() const {
     cout << fixed << setprecision(2);
     cout << trim(title) << " @ " << trim(description) << " @ " << trim(category) << " @ "

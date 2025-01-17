@@ -9,13 +9,9 @@
 #include <algorithm>
 using namespace std;
 
-
-
-//DEN EXOYME YLOPOIHSEI THN SEARCH TO 1.Search for a product
-//POYTSA
-
-
 // Προσθήκη προϊόντος στο καλάθι
+// - Ελέγχει τη διαθεσιμότητα προϊόντος στη λίστα `products`.
+// - Αν το προϊόν βρεθεί και υπάρχει επαρκές απόθεμα, το προσθέτει στο καλάθι.
 void Customer::addToCart(const vector<Product>& products) {
     string title;
     int quantity;
@@ -27,14 +23,15 @@ void Customer::addToCart(const vector<Product>& products) {
     cout << "Enter quantity: ";
     cin >> quantity;
 
+    // Χρήση `find_if` για αναζήτηση προϊόντος με βάση τον τίτλο.
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
-        return p.getTitle() == title;
+        return p.getTitle() == title; // Λάμβανει ως όρισμα ένα lambda για τον τίτλο
     });
 
-    if (it != products.end()) {
-        if (quantity <= it->getQuantity()) {
-            cart.addItem(it->getTitle(), quantity, it->getPrice());
-        } else {
+    if (it != products.end()) { // Αν το προϊόν βρεθεί
+        if (quantity <= it->getQuantity()) { // Επαρκές απόθεμα
+            cart.addItem(it->getTitle(), quantity, it->getPrice()); // Προσθήκη στο καλάθι
+        } else { // Μη επαρκές απόθεμα
             cout << "Not enough stock available. Adding all available quantity.\n";
             cart.addItem(it->getTitle(), it->getQuantity(), it->getPrice());
         }
@@ -44,20 +41,29 @@ void Customer::addToCart(const vector<Product>& products) {
 }
 
 // Αφαίρεση προϊόντος από το καλάθι
+// - Εντοπίζει το προϊόν στο καλάθι με βάση τον τίτλο και το αφαιρεί.
 void Customer::removeFromCart(vector<Product>& products) {
     string title;
 
     cout << "Enter product title to remove: ";
     cin.ignore();
     getline(cin, title);
+
+    // Χρήση `find_if` για αναζήτηση προϊόντος με βάση τον τίτλο
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
-    double price = it->getPrice();
-    cart.removeItem(title, price);
+
+    if (it != products.end()) {
+        double price = it->getPrice();
+        cart.removeItem(title, price); // Αφαίρεση προϊόντος από το καλάθι
+    } else {
+        cout << "Product not found.\n";
+    }
 }
 
-// Ενημέρωση προϊόντος στο καλάθι
+// Ενημέρωση ποσότητας προϊόντος στο καλάθι
+// - Ενημερώνει την ποσότητα ενός προϊόντος στο καλάθι εφόσον υπάρχει.
 void Customer::updateCart(const vector<Product>& products) {
     string title;
     int quantity;
@@ -69,21 +75,25 @@ void Customer::updateCart(const vector<Product>& products) {
     cout << "Enter new quantity: ";
     cin >> quantity;
 
+    // Χρήση `find_if` για εντοπισμό προϊόντος
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
 
     if (it != products.end()) {
-        cart.updateItem(it->getTitle(), quantity, it->getPrice(), it->getQuantity());
+        cart.updateItem(it->getTitle(), quantity, it->getPrice(), it->getQuantity()); // Ενημέρωση ποσότητας
     } else {
         cout << "Product not found.\n";
     }
 }
 
+// Ολοκλήρωση παραγγελίας
+// - Ενημερώνει το ιστορικό παραγγελιών του χρήστη.
+// - Ενημερώνει το απόθεμα προϊόντων και αδειάζει το καλάθι.
 void Customer::completeOrder(vector<Product>& products, const string& fileName) {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
-    // Υπολογισμός αριθμού υπαρχόντων καλαθιών
+    // Υπολογισμός του αριθμού των παραγγελιών από το ιστορικό
     ifstream historyFileInput(historyFileName);
     int cartCount = 0;
     string line;
@@ -91,27 +101,30 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
     if (historyFileInput.is_open()) {
         while (getline(historyFileInput, line)) {
             if (line.find("Total Cost: ") != string::npos) {
-                cartCount++; // Αύξηση δείκτη κάθε φορά που βρίσκουμε το "Total Cost: "
+                cartCount++;
             }
         }
         historyFileInput.close();
     }
+
+    // Ενημέρωση του αποθέματος προϊόντων με βάση το καλάθι
     for (auto& item : cart.getItems()) {
         auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
-        return product.getTitle() == item.first;});
+            return product.getTitle() == item.first;
+        });
         if (it != products.end()) {
-            double newQuantity = it->getQuantity() - item.second;
+            double newQuantity = it->getQuantity() - item.second; // Μείωση αποθέματος
             it->setQuantity(newQuantity > 0 ? newQuantity : 0);
         }
     }
 
-    // Άνοιγμα για εγγραφή νέου ιστορικού παραγγελίας
+    // Αποθήκευση της παραγγελίας στο ιστορικό
     ofstream historyFile(historyFileName, ios::app);
     if (!historyFile.is_open()) {
         cerr << "Error: Could not open " << historyFileName << " for writing.\n";
         return;
     }
-    // Ενημέρωση ιστορικού και εκκαθάριση καλαθιού
+
     stringstream ss;
     ss << "\n\n---CART " << cartCount + 1 << " START---\n";
     for (const auto& item : cart.getItems()) {
@@ -119,22 +132,13 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
     }
     ss << "---CART " << cartCount + 1 << " END---\n";
     ss << "Total Cost: " << fixed << setprecision(2) << cart.getTotalCost();
-    
-    for (auto& item : cart.getItems()) {
-        auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
-            return product.getTitle() == item.first;
-        });
-        if (it != products.end()) {
-            double newQuantity = it->getQuantity() - item.second;
-            it->setQuantity(newQuantity > 0 ? newQuantity : 0);
-        }
-    }
-    cart.clearCart();
+
+    cart.clearCart(); // Αδειάζει το καλάθι
     historyFile << ss.str();
     historyFile.close();
 
     // Ενημέρωση του αρχείου προϊόντων
-    ofstream productFile(fileName, ios::trunc); // Αντικατάσταση του περιεχομένου
+    ofstream productFile(fileName, ios::trunc);
     if (!productFile.is_open()) {
         cerr << "Error: Could not open " << fileName << " for writing.\n";
         return;
@@ -146,8 +150,6 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
                     << it->getCategory() << " @ " << it->getSubCategory() << " @ "
                     << fixed << setprecision(2) << it->getPrice() << " @ "
                     << it->getUnit() << " @ " << fixed << setprecision(0) << it->getQuantity();
-
-        // Προσθήκη νέας γραμμής εκτός από το τελευταίο στοιχείο
         if (++it != products.end()) {
             productFile << "\n";
         }
@@ -157,11 +159,13 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
 }
 
 // Προβολή περιεχομένου καλαθιού
+// - Εμφανίζει τα προϊόντα και τις ποσότητές τους στο καλάθι.
 void Customer::viewCart() const {
     cart.displayCart();
 }
 
 // Προβολή ιστορικού παραγγελιών
+// - Διαβάζει το αρχείο ιστορικού και εμφανίζει τις καταγεγραμμένες παραγγελίες.
 void Customer::viewOrderHistory() const {
     string historyFileName = "files/order_history/" + username + "_history.txt";
 
@@ -180,6 +184,7 @@ void Customer::viewOrderHistory() const {
 }
 
 // Εμφάνιση μενού πελάτη
+// - Επιτρέπει στον πελάτη να αλληλεπιδράσει με το καλάθι, τα προϊόντα και το ιστορικό του.
 void Customer::displayMenu(vector<Product>& products, const string& fileName) {
     int choice;
     do {

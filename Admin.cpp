@@ -11,12 +11,13 @@
 //namespace fs = std::experimental::filesystem; // Εναλλακτικό namespace
 using namespace std;
 
-// Προσθήκη νέου προϊόντος
+// Προσθέτει ένα νέο προϊόν στη λίστα προϊόντων και στο αρχείο αποθήκευσης
 void Admin::addProduct(vector<Product>& products, const vector<string>& categories, const string& fileName) {
     string title, description, category, subCategory, unit;
     double price;
     int quantity;
 
+    // Ζητά από τον χρήστη τα χαρακτηριστικά του νέου προϊόντος
     cout << "Give product title: ";
     cin.ignore();
     getline(cin, title);
@@ -24,6 +25,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     cout << "Give product description: ";
     getline(cin, description);
     
+    // Επιλογή κατηγορίας από προκαθορισμένες επιλογές
     do {
         cout << "Give one of the following categories:\n";
         for (size_t i = 0; i < categories.size(); ++i) {
@@ -35,21 +37,25 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     cout << "Give subcategory: ";
     getline(cin, subCategory);
 
+    // Εισαγωγή τιμής προϊόντος (έλεγχος για θετική τιμή)
     do {
         cout << "Give product price: ";
         cin >> price;
     } while (price < 0);
 
+    // Επιλογή μονάδας μέτρησης
     do {
         cout << "Give measurement type[Kg/Unit]: ";
         cin >> unit;
     } while (unit != "Kg" && unit != "Unit");
 
+    // Εισαγωγή διαθέσιμης ποσότητας (έλεγχος για μη αρνητική ποσότητα)
     do {
         cout << "Give amount of " << unit << ": ";
         cin >> quantity;
     } while (quantity < 0.00);
 
+    // Δημιουργία και προσθήκη του προϊόντος στη λίστα προϊόντων
     products.emplace_back(title, description, category, subCategory, price, unit, quantity);
 
     // Ενημέρωση του αρχείου προϊόντων
@@ -65,7 +71,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     cout << "Product added successfully!\n";
 }
 
-// Επεξεργασία προϊόντος
+// Επεξεργάζεται ένα προϊόν της λίστας
 void Admin::editProduct(vector<Product>& products, const string& fileName) {
     string title;
     cout << "Enter product title to edit: ";
@@ -73,7 +79,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
     getline(cin, title);
     title = trim(title);
 
-
+    // Αναζητά το προϊόν με βάση τον τίτλο
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
@@ -85,6 +91,8 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
 
     Product& product = *it;
     int choice;
+
+    // Επιλογή πεδίου προς επεξεργασία
     while (true) {
         cout << "Enter number of field you want to edit: 1. Title 2. Description 3. Category and Subcategory 4. Price 5. Quantity 6. Nothing\n";
         cin >> choice;
@@ -98,8 +106,9 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
         break;
     }
 
-    cin.ignore(); // Clear the input buffer for getline
+    cin.ignore(); // Καθαρίζει το buffer εισόδου για χρήση του getline
 
+    // Επεξεργασία του επιλεγμένου πεδίου
     switch (choice) {
         case 1: {
             cout << "Enter new Title: ";
@@ -157,7 +166,8 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
         default:
         return;
     }    
-    // Ενημέρωση αρχείου
+
+    // Ενημέρωση του αρχείου προϊόντων
     ofstream file(fileName);
     if (!file.is_open()) {
         cerr << "Error: Could not open " << fileName << " for writing.\n";
@@ -168,7 +178,7 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
         file << product.getTitle() << " @ " << product.getDescription() << " @ " << product.getCategory() << " @ " 
              << product.getSubCategory() << " @ " << fixed << setprecision(2) << product.getPrice() << " @ "<< fixed << setprecision(0) << product.getUnit() << " @ " 
              << product.getQuantity();
-    // Προσθήκη νέας γραμμής εκτός από την τελευταία εγγραφή
+        // Προσθήκη νέας γραμμής εκτός από την τελευταία εγγραφή
         if (i < products.size() - 1) {
             file << endl;
         }
@@ -177,32 +187,35 @@ void Admin::editProduct(vector<Product>& products, const string& fileName) {
 
     cout << "Product updated successfully.\n";
 }
-
+// Αφαιρεί προϊόν από τη λίστα προϊόντων και από το αρχείο αποθήκευσης
 void Admin::removeProduct(vector<Product>& products, const string& fileName) {
     string title;
     cout << "Enter product title to remove: ";
     cin.ignore();
     getline(cin, title);
 
+    // Αναζητά το προϊόν με βάση τον τίτλο
     auto it = find_if(products.begin(), products.end(), [&title](const Product& p) {
         return p.getTitle() == title;
     });
 
     if (it == products.end()) {
+        // Επιστρέφει μήνυμα σφάλματος αν το προϊόν δεν βρεθεί
         cout << "Product not found.\n";
         return;
     }
 
-    // Remove the product from the vector
+    // Αφαιρεί το προϊόν από τη λίστα προϊόντων
     products.erase(it);
 
-    // Update the file with the remaining products
+    // Ενημερώνει το αρχείο προϊόντων για να αντικατοπτρίζει τις αλλαγές
     ofstream file(fileName, ios::trunc);
     if (!file.is_open()) {
         cerr << "Error: Could not open " << fileName << " for writing.\n";
         return;
     }
 
+    // Γράφει τα εναπομείναντα προϊόντα στο αρχείο
     for (const auto& product : products) {
         file << product.getTitle() << " @ " << product.getDescription() << " @ "
              << product.getCategory() << " @ " << product.getSubCategory() << " @ "
@@ -215,6 +228,7 @@ void Admin::removeProduct(vector<Product>& products, const string& fileName) {
     cout << "Product removed successfully.\n";
 }
 
+// Αναζητά προϊόντα με βάση τίτλο, κατηγορία ή συνδυασμό αυτών
 void Admin::searchProducts(const vector<Product>& products, const vector<string>& categories) const {
     cout << "1. Search by title\n";
     cout << "2. Search by category\n";
@@ -226,6 +240,7 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
     cin >> choice;
     cin.ignore();
 
+    // Αναζήτηση προϊόντων ανάλογα με την επιλογή του χρήστη
     if (choice == 1) {
         string title;
         cout << "Enter product title: ";
@@ -286,14 +301,17 @@ void Admin::searchProducts(const vector<Product>& products, const vector<string>
             }
         }
     } else if (choice == 4) {
+        // Προβάλλει όλα τα προϊόντα
         for (const auto& product : products) {
             product.displayProduct();
         }
     } else {
+        // Εμφάνιση μηνύματος για μη έγκυρη επιλογή
         cout << "Invalid choice. Please try again.\n";
     }
 }
 
+// Εμφανίζει προϊόντα που δεν έχουν διαθέσιμο απόθεμα
 void Admin::unavailableProducts() const {
     const string productsFilePath = "files/products.txt"; // Σταθερή διαδρομή για το αρχείο προϊόντων
 
@@ -307,6 +325,7 @@ void Admin::unavailableProducts() const {
     cout << "Unavailable Products:\n";
     bool found = false;
 
+    // Αναζητά προϊόντα με μηδενικό απόθεμα
     while (getline(productsFile, line)) {
         size_t lastSeparator = line.find_last_of('@');
         if (lastSeparator == string::npos) continue;
@@ -330,7 +349,6 @@ void Admin::unavailableProducts() const {
 
     productsFile.close();
 }
-
 void Admin::top5Products(const vector<Product>& products) const {
    /* const string orderHistoryPath = "files/order_history/";
     map<string, int> productCount;

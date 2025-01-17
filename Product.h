@@ -5,22 +5,25 @@
 #include <iostream>
 using namespace std;
 
+// Κλάση Product: Αντιπροσωπεύει ένα προϊόν με χαρακτηριστικά όπως τίτλος, περιγραφή, τιμή και ποσότητα
 class Product {
 private:
-    string title;
-    string description;
-    string category;
-    string subCategory;
-    double price;
-    string unit;
-    int quantity;
+    string title;         // Τίτλος του προϊόντος
+    string description;   // Περιγραφή του προϊόντος
+    string category;      // Κατηγορία του προϊόντος (π.χ. Food, Tech)
+    string subCategory;   // Υποκατηγορία του προϊόντος
+    double price;         // Τιμή ανά μονάδα ή βάρος
+    string unit;          // Μονάδα μέτρησης (π.χ. Kg, Unit)
+    int quantity;         // Διαθέσιμη ποσότητα
 
 public:
+    // Κατασκευαστής: Αρχικοποιεί το προϊόν με προκαθορισμένες ή παρεχόμενες τιμές
     Product(const string& title = "", const string& description = "",
             const string& category = "", const string& subCategory = "",
             double price = 0.0, const string& unit = "", int quantity = 0.0);
 
-    // Getters
+    // Getters: Επιστρέφουν τις τιμές των χαρακτηριστικών
+    // Χρησιμοποιούν `const` για να διασφαλίσουν ότι δεν τροποποιούν το αντικείμενο
     string getTitle() const;
     string getDescription() const;
     string getCategory() const;
@@ -29,7 +32,7 @@ public:
     string getUnit() const;
     int getQuantity() const;
 
-    // Setters
+    // Setters: Ενημερώνουν τις τιμές των χαρακτηριστικών
     void setTitle(const string& newTitle);
     void setDescription(const string& newDescription);
     void setCategory(const string& newCategory);
@@ -37,10 +40,14 @@ public:
     void setPrice(double newPrice);
     void setQuantity(int newQuantity);
 
-    // Overloaded operators
+    // Υπερφορτωμένοι τελεστές εισόδου/εξόδου
+    // - `operator<<`: Εξάγει τις ιδιότητες του προϊόντος σε ένα stream
+    // - `operator>>`: Εισάγει τις ιδιότητες του προϊόντος από ένα stream
     friend ostream& operator<<(ostream& os, const Product& product);
     friend istream& operator>>(istream& is, Product& product);
 
+    // Εμφάνιση χαρακτηριστικών προϊόντος
+    // Εμφανίζει τα χαρακτηριστικά του προϊόντος σε μορφοποιημένη έξοδο
     void displayProduct() const;
 };
 
