@@ -443,10 +443,6 @@ void Admin::unavailableProducts() const {
     productsFile.close();
 }
 
-
-
-using namespace std;
-
 void Admin::top5Products(const vector<Product>& products) const {
     const string orderHistoryPath = "files/order_history/";
     map<string, int> productCount;
@@ -484,10 +480,9 @@ void Admin::top5Products(const vector<Product>& products) const {
 
             size_t spacePos = line.find(' ');
             if (spacePos != string::npos) {
-                int quantity = stoi(line.substr(0, spacePos));
                 string title = line.substr(spacePos + 1);
 
-                productCount[title] += quantity;
+                productCount[title] ++;
             }
         }
         historyFile.close();
@@ -501,10 +496,10 @@ void Admin::top5Products(const vector<Product>& products) const {
     });
 
     // Εμφάνιση των 5 πιο δημοφιλών προϊόντων
-    cout << "Top 5 Most Popular Products (by quantity):\n";
+    cout << "Top 5 Most Popular Products:\n";
     for (size_t i = 0; i < min(sortedProducts.size(), size_t(5)); ++i) {
         size_t index = sortedProducts.size() - 1 - i; // Υπολογισμός του αντιστρόφου index
-        cout << i + 1 << ". " << sortedProducts[index].first << " - " << sortedProducts[index].second << " units\n";
+        cout << i + 1 << ". " << sortedProducts[index].first << " - " << sortedProducts[index].second << " orders\n";
     }
 
 }
