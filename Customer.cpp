@@ -9,6 +9,12 @@
 #include <algorithm>
 using namespace std;
 
+
+
+//DEN EXOYME YLOPOIHSEI THN SEARCH TO 1.Search for a product
+//POYTSA
+
+
 // Προσθήκη προϊόντος στο καλάθι
 void Customer::addToCart(const vector<Product>& products) {
     string title;
@@ -89,6 +95,14 @@ void Customer::completeOrder(vector<Product>& products, const string& fileName) 
             }
         }
         historyFileInput.close();
+    }
+    for (auto& item : cart.getItems()) {
+        auto it = find_if(products.begin(), products.end(), [&item](const Product& product) {
+        return product.getTitle() == item.first;});
+        if (it != products.end()) {
+            double newQuantity = it->getQuantity() - item.second;
+            it->setQuantity(newQuantity > 0 ? newQuantity : 0);
+        }
     }
 
     // Άνοιγμα για εγγραφή νέου ιστορικού παραγγελίας

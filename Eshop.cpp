@@ -6,8 +6,7 @@
 using namespace std;
 
 // Κατασκευαστής: Αποθηκεύει τα paths και φορτώνει τα δεδομένα
-Eshop::Eshop(const string& categoriesFile, const string& productsFile, const string& usersFile)
-    : categoriesFile(categoriesFile), productsFile(productsFile), usersFile(usersFile) {
+Eshop::Eshop(const string& categoriesFile, const string& productsFile, const string& usersFile): categoriesFile(categoriesFile), productsFile(productsFile), usersFile(usersFile) {
     loadCategories();
     loadProducts();
     loadUsers();

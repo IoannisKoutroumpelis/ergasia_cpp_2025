@@ -48,7 +48,7 @@ void Admin::addProduct(vector<Product>& products, const vector<string>& categori
     do {
         cout << "Give amount of " << unit << ": ";
         cin >> quantity;
-    } while (quantity < 0);
+    } while (quantity < 0.00);
 
     products.emplace_back(title, description, category, subCategory, price, unit, quantity);
 
