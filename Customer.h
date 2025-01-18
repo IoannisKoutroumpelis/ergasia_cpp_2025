@@ -17,6 +17,7 @@ public:
     // - Η τρίτη παράμετρος (false) δηλώνει ότι ο χρήστης δεν είναι Admin
     Customer(const string& username, const string& password) : User(username, password, false) {}
 
+    // Αναζητά προϊόντα με βάση τον τίτλο ή την κατηγορία ή συνδυασμό αυτών
     void searchProducts(const vector<Product>& products, const vector<string>& categories) const;
 
     // Προσθέτει ένα προϊόν στο καλάθι

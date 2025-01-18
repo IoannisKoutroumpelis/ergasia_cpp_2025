@@ -443,6 +443,7 @@ void Admin::unavailableProducts() const {
     productsFile.close();
 }
 
+// Εμφανίζει τα 5 πιο δημοφιλή προϊόντα
 void Admin::top5Products(const vector<Product>& products) const {
     const string orderHistoryPath = "files/order_history/";
     map<string, int> productCount;
